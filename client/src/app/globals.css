@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --amzn-dark-nav: #131921;
+  --amzn-sub-nav: #232f3e;
+  --amzn-gold: #febd69;
+  --amzn-gold-hover: #f3a847;
+  --amzn-orange: #e47911;
+  --amzn-teal: #007185;
+  --amzn-teal-hover: #c7511f;
+  --amzn-red: #b12704;
+  --amzn-cart-btn: #ffd814;
+  --amzn-cart-btn-hover: #f7ca00;
+  --amzn-cart-btn-border: #a88734;
+  --amzn-buy-btn: #ffa41c;
+  --amzn-buy-btn-hover: #fa8900;
+  --amzn-buy-btn-border: #97762e;
+  --amzn-bg: #ffffff;
+  --amzn-bg-alt: #eaeded;
+  --amzn-bg-tertiary: #f5f5f5;
+  --amzn-text: #0f1111;
+  --amzn-text-secondary: #565959;
+  --amzn-text-tertiary: #767676;
+  --amzn-border: #dddddd;
+  --amzn-border-light: #e7e7e7;
+  --amzn-prime: #00a8e1;
+  --amzn-success: #007600;
+  --amzn-warning: #c45500;
+  --amzn-star: #de7921;
+  --amzn-input-focus: #e77600;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Amazon Ember", "Helvetica Neue", Arial, sans-serif;
+  color: #0f1111;
+  background-color: #ffffff;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: #007185;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #c7511f;
+  text-decoration: underline;
+}
+
+/* Amazon-style line-clamp */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Amazon price superscript style */
+.price-superscript {
+  font-size: 0.55em;
+  vertical-align: super;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Amazon-style scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Skeleton pulse animation */
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.animate-pulse-slow {
+  animation: pulse 1.5s ease-in-out infinite;
+}
