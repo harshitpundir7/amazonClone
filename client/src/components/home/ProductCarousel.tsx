@@ -43,8 +43,19 @@ export default function ProductCarousel({ title, products, loading, seeAllHref }
 
   if (loading) {
     return (
-      <div className="bg-white p-5 rounded-amzn-md max-w-amzn-container mx-auto mb-4">
-        <div className="h-6 w-48 bg-amzn-border-secondary animate-pulse rounded" />
+      <div className="bg-white p-5 pb-7 rounded-amzn-md max-w-amzn-container mx-auto mb-4">
+        <div className="h-6 w-48 bg-amzn-border-secondary animate-pulse rounded mb-4" />
+        <div className="flex gap-4 overflow-hidden">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="flex-shrink-0 min-w-[210px] max-w-[210px]">
+              <div className="w-full h-[200px] bg-amzn-border-secondary animate-pulse rounded mb-2" />
+              <div className="h-4 w-16 bg-amzn-border-secondary animate-pulse rounded mb-1" />
+              <div className="h-4 w-full bg-amzn-border-secondary animate-pulse rounded mb-1" />
+              <div className="h-3 w-20 bg-amzn-border-secondary animate-pulse rounded mb-1" />
+              <div className="h-4 w-24 bg-amzn-border-secondary animate-pulse rounded" />
+            </div>
+          ))}
+        </div>
       </div>
     );
   }

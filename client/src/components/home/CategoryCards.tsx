@@ -6,11 +6,33 @@ import type { Category } from '@/types';
 
 interface CategoryCardsProps {
   categories: Category[];
+  loading?: boolean;
 }
 
 const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1526170375885-91d2cf1d1a6d?w=400';
 
-export default function CategoryCards({ categories }: CategoryCardsProps) {
+export default function CategoryCards({ categories, loading }: CategoryCardsProps) {
+  if (loading) {
+    return (
+      <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-4 max-w-amzn-container mx-auto px-4 -mt-8 relative z-10">
+        {Array.from({ length: 10 }).map((_, i) => (
+          <div key={i} className="bg-white p-5 rounded-amzn-md min-h-[420px] flex flex-col animate-pulse">
+            <div className="h-6 w-32 bg-amzn-border-secondary rounded mb-3" />
+            <div className="grid grid-cols-2 gap-3 flex-1">
+              {Array.from({ length: 4 }).map((_, j) => (
+                <div key={j} className="flex flex-col items-center">
+                  <div className="w-full h-[110px] bg-amzn-border-secondary rounded" />
+                  <div className="h-3 w-16 bg-amzn-border-secondary rounded mt-1" />
+                </div>
+              ))}
+            </div>
+            <div className="h-3 w-20 bg-amzn-border-secondary rounded mt-auto" />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   // Show only top-level categories
   const topCategories = categories.filter((c) => !c.parentId);
 

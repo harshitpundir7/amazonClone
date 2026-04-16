@@ -57,7 +57,7 @@ export default function HomePage() {
         <HeroCarousel />
 
         {/* Category Cards */}
-        <CategoryCards categories={categories} />
+        <CategoryCards categories={categories} loading={loading} />
 
         {/* Product Carousels */}
         <div className="py-4 space-y-4">
