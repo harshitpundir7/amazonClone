@@ -89,7 +89,7 @@ export default function CartPage() {
       productId: item.productId,
       product: item.product,
       variant: item.variant,
-      effectivePrice: item.effectivePrice,
+      effectivePrice: item.effectivePrice ?? item.product?.basePrice ?? 0,
       quantity: item.quantity,
     };
     const updated = [...savedItems, saved];
