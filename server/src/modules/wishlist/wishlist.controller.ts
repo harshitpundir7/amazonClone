@@ -5,7 +5,7 @@ import { AppError } from '../../middleware/error-handler';
 
 export const getWishlist = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = req.user?.id || 1;
+    const userId = req.user!.id;
     const data = await wishlistService.findByUser(userId);
     sendResponse(res, { statusCode: 200, message: 'Wishlist fetched successfully', data });
   } catch (error) {
@@ -15,7 +15,7 @@ export const getWishlist = async (req: Request, res: Response, next: NextFunctio
 
 export const addToWishlist = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = req.user?.id || 1;
+    const userId = req.user!.id;
     const productId = parseInt(req.params.productId);
     if (isNaN(productId)) throw new AppError(400, 'Invalid product ID');
 
@@ -28,7 +28,7 @@ export const addToWishlist = async (req: Request, res: Response, next: NextFunct
 
 export const removeFromWishlist = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = req.user?.id || 1;
+    const userId = req.user!.id;
     const productId = parseInt(req.params.productId);
     if (isNaN(productId)) throw new AppError(400, 'Invalid product ID');
 

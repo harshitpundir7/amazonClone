@@ -55,13 +55,7 @@ export const searchProducts = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const query = req.query.q as string;
-
-    if (!query) {
-      throw new AppError(400, 'Search query is required.');
-    }
-
-    const result = await productService.search(query, req.query as any);
+    const result = await productService.search(req.query as any);
 
     sendResponse(res, {
       statusCode: 200,

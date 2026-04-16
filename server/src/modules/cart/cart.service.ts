@@ -82,8 +82,18 @@ export const cartService = {
         throw new AppError(404, 'Variant not found or unavailable.');
       }
 
-      if (variant.stock < 1) {
-        throw new AppError(400, 'Variant is out of stock.');
+      if (variant.stock < data.quantity) {
+        throw new AppError(400, `Only ${variant.stock} units available in stock.`);
+      }
+    } else {
+      // No variant selected — check stock from the first active variant or product
+      const availableVariant = await prisma.productVariant.findFirst({
+        where: { productId: data.productId, isActive: true },
+        orderBy: { stock: 'desc' },
+      });
+
+      if (availableVariant && availableVariant.stock < data.quantity) {
+        throw new AppError(400, `Only ${availableVariant.stock} units available in stock.`);
       }
     }
 
@@ -133,6 +143,39 @@ export const cartService = {
 
     if (!existingItem) {
       throw new AppError(404, 'Cart item not found.');
+    }
+
+    // Verify product is still active
+    const product = await prisma.product.findUnique({
+      where: { id: existingItem.productId },
+    });
+
+    if (!product || !product.isActive) {
+      throw new AppError(400, 'Product is no longer available.');
+    }
+
+    // Check stock availability for the requested quantity
+    if (existingItem.variantId) {
+      const variant = await prisma.productVariant.findUnique({
+        where: { id: existingItem.variantId },
+      });
+
+      if (!variant || !variant.isActive) {
+        throw new AppError(400, 'Variant is no longer available.');
+      }
+
+      if (variant.stock < data.quantity) {
+        throw new AppError(400, `Only ${variant.stock} units available in stock.`);
+      }
+    } else {
+      const availableVariant = await prisma.productVariant.findFirst({
+        where: { productId: existingItem.productId, isActive: true },
+        orderBy: { stock: 'desc' },
+      });
+
+      if (availableVariant && availableVariant.stock < data.quantity) {
+        throw new AppError(400, `Only ${availableVariant.stock} units available in stock.`);
+      }
     }
 
     const cartItem = await prisma.cartItem.update({

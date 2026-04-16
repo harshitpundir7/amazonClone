@@ -2,7 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth-store";
+import api from "@/lib/api";
 import type { Category } from "@/types";
 
 interface MobileDrawerProps {
@@ -27,6 +29,21 @@ function CloseIcon() {
   );
 }
 
+function ChevronRightIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="text-amzn-text-tertiary"
+    >
+      <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" fill="currentColor" />
+    </svg>
+  );
+}
+
 function ChevronDownIcon({ rotated }: { rotated: boolean }) {
   return (
     <svg
@@ -42,50 +59,32 @@ function ChevronDownIcon({ rotated }: { rotated: boolean }) {
   );
 }
 
-const SAMPLE_CATEGORIES: Category[] = [
-  {
-    id: 1,
-    name: "Electronics",
-    slug: "electronics",
-    sortOrder: 1,
-    isActive: true,
-    children: [
-      { id: 11, name: "Mobiles", slug: "mobiles", parentId: 1, sortOrder: 1, isActive: true },
-      { id: 12, name: "Laptops", slug: "laptops", parentId: 1, sortOrder: 2, isActive: true },
-    ],
-  },
-  {
-    id: 2,
-    name: "Books",
-    slug: "books",
-    sortOrder: 2,
-    isActive: true,
-  },
-  {
-    id: 3,
-    name: "Fashion",
-    slug: "fashion",
-    sortOrder: 3,
-    isActive: true,
-    children: [
-      { id: 31, name: "Men", slug: "men", parentId: 3, sortOrder: 1, isActive: true },
-      { id: 32, name: "Women", slug: "women", parentId: 3, sortOrder: 2, isActive: true },
-    ],
-  },
-  {
-    id: 4,
-    name: "Home & Kitchen",
-    slug: "home-kitchen",
-    sortOrder: 4,
-    isActive: true,
-  },
-];
-
 export default function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
-  const [categories, setCategories] = useState<Category[]>(SAMPLE_CATEGORIES);
+  const router = useRouter();
+  const [categories, setCategories] = useState<Category[]>([]);
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const user = useAuthStore((s) => s.user);
+  const logout = useAuthStore((s) => s.logout);
+
+  // Fetch categories from API
+  useEffect(() => {
+    if (isOpen && categories.length === 0) {
+      api.get("/categories")
+        .then((res: any) => {
+          const cats = res.data?.categories || res.categories || res.data || [];
+          const topLevel = cats.filter((c: Category) => !c.parentId);
+          setCategories(topLevel);
+        })
+        .catch(() => {});
+    }
+  }, [isOpen, categories.length]);
+
+  const handleSignOut = () => {
+    onClose();
+    logout();
+    router.push("/");
+  };
 
   // Prevent body scroll when drawer is open
   useEffect(() => {
@@ -109,28 +108,34 @@ export default function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
     <>
       {/* Overlay */}
       <div
-        className="fixed inset-0 z-50 bg-black/50"
+        className="fixed inset-0 z-[2000] bg-black/50"
         onClick={onClose}
       />
 
       {/* Drawer */}
-      <div className="fixed top-0 left-0 z-50 h-full w-[80vw] max-w-[380px] bg-white overflow-y-auto transition-transform duration-300">
+      <div className="fixed top-0 left-0 z-[2000] h-full w-[80vw] max-w-[380px] bg-white overflow-y-auto animate-[slideIn_0.3s_ease-out]">
         {/* Header */}
-        <div className="flex items-center justify-between bg-amzn-dark-nav px-4 py-3">
+        <div className="flex items-center justify-between bg-amzn-sub-nav px-4 py-3">
           {isAuthenticated ? (
             <Link
               href="/account"
-              className="text-[16px] font-bold text-white hover:no-underline"
+              className="flex items-center gap-2 text-[16px] font-bold text-white hover:no-underline"
               onClick={onClose}
             >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="white" className="rounded-full bg-amzn-dark-nav p-0.5">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="currentColor" />
+              </svg>
               Hello, {user?.name?.split(" ")[0] || "User"}
             </Link>
           ) : (
             <Link
               href="/login"
-              className="text-[16px] font-bold text-white hover:no-underline"
+              className="flex items-center gap-2 text-[16px] font-bold text-white hover:no-underline"
               onClick={onClose}
             >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="white" className="rounded-full bg-amzn-dark-nav p-0.5">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="currentColor" />
+              </svg>
               Hello, Sign in
             </Link>
           )}
@@ -148,7 +153,7 @@ export default function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
             Trending
           </h3>
           <ul className="space-y-2">
-            <li>
+            <li className="flex items-center justify-between">
               <Link
                 href="/search?sort=bestselling"
                 className="text-[14px] text-amzn-text-primary hover:text-amzn-teal"
@@ -156,8 +161,9 @@ export default function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
               >
                 Best Sellers
               </Link>
+              <ChevronRightIcon />
             </li>
-            <li>
+            <li className="flex items-center justify-between">
               <Link
                 href="/search?sort=newest"
                 className="text-[14px] text-amzn-text-primary hover:text-amzn-teal"
@@ -165,6 +171,7 @@ export default function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
               >
                 New Releases
               </Link>
+              <ChevronRightIcon />
             </li>
           </ul>
         </div>
@@ -179,19 +186,21 @@ export default function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
               <li key={cat.id}>
                 <div className="flex items-center justify-between py-2 border-b border-amzn-border-secondary">
                   <Link
-                    href={`/search?category=${cat.slug}`}
+                    href={`/category/${cat.slug}`}
                     className="text-[14px] text-amzn-text-primary hover:text-amzn-teal"
                     onClick={onClose}
                   >
                     {cat.name}
                   </Link>
-                  {cat.children && cat.children.length > 0 && (
+                  {cat.children && cat.children.length > 0 ? (
                     <button
                       onClick={() => toggleExpand(cat.id)}
                       className="text-amzn-text-tertiary cursor-pointer bg-transparent border-0 p-0"
                     >
                       <ChevronDownIcon rotated={expandedId === cat.id} />
                     </button>
+                  ) : (
+                    <ChevronRightIcon />
                   )}
                 </div>
                 {cat.children && cat.children.length > 0 && expandedId === cat.id && (
@@ -199,7 +208,7 @@ export default function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
                     {cat.children.map((child) => (
                       <li key={child.id}>
                         <Link
-                          href={`/search?category=${child.slug}`}
+                          href={`/category/${child.slug}`}
                           className="block py-2 text-[14px] text-amzn-text-secondary hover:text-amzn-teal border-b border-amzn-border-secondary"
                           onClick={onClose}
                         >
@@ -220,7 +229,7 @@ export default function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
             Help & Settings
           </h3>
           <ul className="space-y-2">
-            <li>
+            <li className="flex items-center justify-between">
               <Link
                 href="/account"
                 className="text-[14px] text-amzn-text-primary hover:text-amzn-teal"
@@ -228,16 +237,38 @@ export default function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
               >
                 Your Account
               </Link>
+              <ChevronRightIcon />
             </li>
-            <li>
+            <li className="flex items-center justify-between">
               <Link
                 href="/orders"
                 className="text-[14px] text-amzn-text-primary hover:text-amzn-teal"
                 onClick={onClose}
               >
-                Customer Service
+                Your Orders
               </Link>
+              <ChevronRightIcon />
             </li>
+            <li className="flex items-center justify-between">
+              <Link
+                href="/wishlist"
+                className="text-[14px] text-amzn-text-primary hover:text-amzn-teal"
+                onClick={onClose}
+              >
+                Your Wishlist
+              </Link>
+              <ChevronRightIcon />
+            </li>
+            {isAuthenticated && (
+              <li>
+                <button
+                  onClick={handleSignOut}
+                  className="text-[14px] text-amzn-text-primary hover:text-amzn-teal cursor-pointer bg-transparent border-none p-0"
+                >
+                  Sign Out
+                </button>
+              </li>
+            )}
           </ul>
         </div>
       </div>

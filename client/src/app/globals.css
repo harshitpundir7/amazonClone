@@ -107,3 +107,42 @@ a:hover {
 .animate-pulse-slow {
   animation: pulse 1.5s ease-in-out infinite;
 }
+
+/* Print styles for invoice */
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+    background: white;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .print\\:hidden {
+    display: none !important;
+  }
+
+  /* Remove nav, footer when printing from any page */
+  header,
+  nav,
+  footer,
+  [role="navigation"] {
+    display: none !important;
+  }
+
+  /* Invoice-specific: ensure table borders print */
+  table {
+    border-collapse: collapse !important;
+  }
+
+  table th,
+  table td {
+    border: 1px solid #ccc !important;
+  }
+
+  /* Prevent page breaks inside elements */
+  tr,
+  .no-page-break {
+    page-break-inside: avoid;
+  }
+}

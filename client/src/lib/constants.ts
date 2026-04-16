@@ -31,18 +31,39 @@ export const CATEGORY_NAV_LINKS = [
 export const FOOTER_COLUMNS = [
   {
     title: 'Get to Know Us',
-    links: ['About Amazon', 'Careers', 'Press Releases', 'Amazon Science'],
+    links: [
+      { label: 'About Amazon', href: '#' },
+      { label: 'Careers', href: '#' },
+      { label: 'Press Releases', href: '#' },
+      { label: 'Amazon Science', href: '#' },
+    ],
   },
   {
     title: 'Connect with Us',
-    links: ['Facebook', 'Twitter', 'Instagram'],
+    links: [
+      { label: 'Facebook', href: '#' },
+      { label: 'Twitter', href: '#' },
+      { label: 'Instagram', href: '#' },
+    ],
   },
   {
     title: 'Make Money with Us',
-    links: ['Sell on Amazon', 'Sell under Amazon Brand', 'Become an Affiliate', 'Advertise Your Products'],
+    links: [
+      { label: 'Sell on Amazon', href: '#' },
+      { label: 'Sell under Amazon Brand', href: '#' },
+      { label: 'Become an Affiliate', href: '#' },
+      { label: 'Advertise Your Products', href: '#' },
+    ],
   },
   {
     title: 'Let Us Help You',
-    links: ['Your Account', 'Returns Centre', 'Customer Service', 'Help'],
+    links: [
+      { label: 'Your Account', href: '/account' },
+      { label: 'Your Orders', href: '/orders' },
+      { label: 'Returns Centre', href: '/orders' },
+      { label: 'Your Wishlist', href: '/wishlist' },
+      { label: 'Customer Service', href: '#' },
+      { label: 'Help', href: '#' },
+    ],
   },
 ] as const;

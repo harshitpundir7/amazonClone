@@ -11,6 +11,7 @@ import type { Order } from '@/types';
 import { formatMrp } from '@/lib/utils';
 import Badge from '@/components/ui/Badge';
 import Skeleton from '@/components/ui/Skeleton';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 
 export default function OrderDetailPage() {
   const params = useParams();
@@ -20,8 +21,8 @@ export default function OrderDetailPage() {
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-        const res = await api.get(`/orders/${params.id}`);
-        setOrder(res.data);
+        const res = await api.get(`/orders/${params.id}`) as any;
+        setOrder(res?.data ?? res);
       } catch (err) {
         console.error('Failed to fetch order:', err);
       } finally {
@@ -31,14 +32,15 @@ export default function OrderDetailPage() {
     if (params.id) fetchOrder();
   }, [params.id]);
 
-  if (loading) return <div className="min-h-screen bg-amzn-bg-secondary"><Header /><SubNav categories={[]} /><div className="max-w-amzn-container mx-auto px-6 py-8"><Skeleton variant="card" /></div><Footer /></div>;
+  if (loading) return <ProtectedRoute><div className="min-h-screen bg-amzn-bg-secondary"><Header /><SubNav /><div className="max-w-amzn-container mx-auto px-6 py-8"><Skeleton variant="card" /></div><Footer /></div></ProtectedRoute>;
 
-  if (!order) return <div className="min-h-screen bg-amzn-bg-secondary"><Header /><SubNav categories={[]} /><div className="max-w-amzn-container mx-auto px-6 py-8"><p>Order not found</p></div><Footer /></div>;
+  if (!order) return <ProtectedRoute><div className="min-h-screen bg-amzn-bg-secondary"><Header /><SubNav /><div className="max-w-amzn-container mx-auto px-6 py-8"><p>Order not found</p></div><Footer /></div></ProtectedRoute>;
 
   return (
+    <ProtectedRoute>
     <div className="min-h-screen bg-amzn-bg-secondary">
       <Header />
-      <SubNav categories={[]} />
+      <SubNav />
 
       <div className="max-w-amzn-container mx-auto px-6 py-8">
         <div className="mb-4">
@@ -51,11 +53,19 @@ export default function OrderDetailPage() {
           {/* Order header */}
           <div className="p-6 border-b border-amzn-border-primary">
             <div className="flex items-center justify-between mb-4">
-              <h1 className="text-[24px] font-bold text-amzn-text-primary">Order {order.orderNumber}</h1>
-              <Badge
-                variant={order.status === 'delivered' || order.status === 'shipped' ? 'success' : 'warning'}
-                text={order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-              />
+              <div className="flex items-center gap-3">
+                <h1 className="text-[24px] font-bold text-amzn-text-primary">Order {order.orderNumber}</h1>
+                <Badge
+                  variant={order.status === 'delivered' || order.status === 'shipped' ? 'success' : 'warning'}
+                  text={order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                />
+              </div>
+              <Link
+                href={`/orders/${params.id}/invoice`}
+                className="text-[13px] text-amzn-teal hover:text-amzn-teal-hover hover:underline"
+              >
+                View Invoice
+              </Link>
             </div>
             <div className="grid grid-cols-3 gap-6 text-sm">
               <div>
@@ -146,5 +156,6 @@ export default function OrderDetailPage() {
 
       <Footer />
     </div>
+    </ProtectedRoute>
   );
 }

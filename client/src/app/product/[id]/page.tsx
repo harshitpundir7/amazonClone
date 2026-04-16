@@ -10,6 +10,7 @@ import Footer from '@/components/layout/Footer';
 import ProductImageGallery from '@/components/product/ProductImageGallery';
 import ProductInfo from '@/components/product/ProductInfo';
 import ReviewSection from '@/components/product/ReviewSection';
+import ProductCarousel from '@/components/home/ProductCarousel';
 import Skeleton from '@/components/ui/Skeleton';
 
 export default function ProductDetailPage() {
@@ -18,6 +19,7 @@ export default function ProductDetailPage() {
 
   const [product, setProduct] = useState<Product | null>(null);
   const [reviews, setReviews] = useState<ProductReview[]>([]);
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
@@ -33,8 +35,8 @@ export default function ProductDetailPage() {
       setLoading(true);
       setError(null);
       try {
-        const data = await api.get(`/products/${id}`);
-        const productData: Product = data.data || data;
+        const data = await api.get(`/products/${id}`) as any;
+        const productData: Product = data?.data?.product ?? data?.data ?? data;
         setProduct(productData);
 
         // If product has reviews attached, use them; otherwise fetch separately
@@ -42,11 +44,25 @@ export default function ProductDetailPage() {
           setReviews(productData.reviews);
         } else {
           try {
-            const reviewData = await api.get(`/products/${id}/reviews`);
-            setReviews(reviewData.data || reviewData || []);
+            const reviewData = await api.get(`/reviews/products/${id}/reviews`) as any;
+            const fetched: any[] = reviewData?.data?.reviews ?? reviewData?.reviews ?? [];
+            setReviews(Array.isArray(fetched) ? fetched : []);
           } catch {
             // Reviews are optional, don't fail the page
             setReviews([]);
+          }
+        }
+
+        // Fetch related products from same category
+        if (productData.categoryId) {
+          try {
+            const relData = await api.get(`/products?categoryId=${productData.categoryId}&limit=12`) as any;
+            const relProducts: Product[] = (relData?.data?.products || []).filter(
+              (p: Product) => p.id !== id
+            );
+            setRelatedProducts(relProducts);
+          } catch {
+            // Related products are optional
           }
         }
       } catch (err) {
@@ -141,8 +157,8 @@ export default function ProductDetailPage() {
     ? product.images.sort((a, b) => a.sortOrder - b.sortOrder)
     : [];
 
-  const avgRating = product.avgRating || 0;
-  const reviewCount = product.reviewCount || 0;
+  const avgRating = Number(product.avgRating || 0);
+  const reviewCount = Number(product.reviewCount || 0);
 
   return (
     <div className="min-h-screen bg-amzn-bg-secondary">
@@ -239,6 +255,18 @@ export default function ProductDetailPage() {
             productId={product.id}
           />
         </div>
+
+        {/* Related products carousel */}
+        {relatedProducts.length > 0 && (
+          <div className="border-t border-amzn-border-secondary">
+            <ProductCarousel
+              title="Customers also bought"
+              products={relatedProducts}
+              loading={false}
+              seeAllHref={product.categoryId ? `/category/${product.category?.slug || product.categoryId}` : undefined}
+            />
+          </div>
+        )}
       </main>
 
       <Footer />

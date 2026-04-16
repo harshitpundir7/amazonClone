@@ -7,6 +7,7 @@ interface AuthStore {
   user: User | null;
   token: string | null;
   isAuthenticated: boolean;
+  initializing: boolean;
   loading: boolean;
   error: string | null;
 
@@ -23,20 +24,21 @@ export const useAuthStore = create<AuthStore>()(
       user: null,
       token: null,
       isAuthenticated: false,
+      initializing: true,
       loading: false,
       error: null,
 
       login: async (email, password) => {
         set({ loading: true, error: null });
         try {
-          const data = await api.post('/auth/login', { email, password });
-          const { token, user } = data.data;
+          const data = await api.post('/auth/login', { email, password }) as any;
+          const { token, user } = data?.data || data;
           if (typeof window !== 'undefined') {
             localStorage.setItem('token', token);
           }
-          set({ user, token, isAuthenticated: true, loading: false });
+          set({ user, token, isAuthenticated: true, loading: false, initializing: false });
         } catch (err) {
-          set({ error: (err as Error).message, loading: false });
+          set({ error: (err as Error).message, loading: false, initializing: false });
           throw err;
         }
       },
@@ -44,14 +46,14 @@ export const useAuthStore = create<AuthStore>()(
       register: async (name, email, password) => {
         set({ loading: true, error: null });
         try {
-          const data = await api.post('/auth/register', { name, email, password });
-          const { token, user } = data.data;
+          const data = await api.post('/auth/register', { name, email, password }) as any;
+          const { token, user } = data?.data || data;
           if (typeof window !== 'undefined') {
             localStorage.setItem('token', token);
           }
-          set({ user, token, isAuthenticated: true, loading: false });
+          set({ user, token, isAuthenticated: true, loading: false, initializing: false });
         } catch (err) {
-          set({ error: (err as Error).message, loading: false });
+          set({ error: (err as Error).message, loading: false, initializing: false });
           throw err;
         }
       },
@@ -60,14 +62,17 @@ export const useAuthStore = create<AuthStore>()(
         if (typeof window !== 'undefined') {
           localStorage.removeItem('token');
         }
-        set({ user: null, token: null, isAuthenticated: false });
+        set({ user: null, token: null, isAuthenticated: false, initializing: false });
       },
 
       fetchMe: async () => {
-        if (!get().token) return;
+        if (!get().token) {
+          set({ initializing: false });
+          return;
+        }
         try {
-          const data = await api.get('/auth/me');
-          set({ user: data.data, isAuthenticated: true });
+          const data = await api.get('/auth/me') as any;
+          set({ user: data?.data?.user ?? data?.data ?? data, isAuthenticated: true, initializing: false });
         } catch {
           get().logout();
         }

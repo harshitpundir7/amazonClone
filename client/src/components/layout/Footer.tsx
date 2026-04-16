@@ -29,13 +29,22 @@ export default function Footer() {
               </h3>
               <ul className="space-y-2">
                 {column.links.map((link) => (
-                  <li key={link}>
-                    <a
-                      href="#"
-                      className="text-[14px] text-amzn-border-primary hover:text-white hover:underline transition-colors"
-                    >
-                      {link}
-                    </a>
+                  <li key={link.label}>
+                    {link.href.startsWith("/") ? (
+                      <Link
+                        href={link.href}
+                        className="text-[14px] text-amzn-border-primary hover:text-white hover:underline transition-colors"
+                      >
+                        {link.label}
+                      </Link>
+                    ) : (
+                      <a
+                        href={link.href}
+                        className="text-[14px] text-amzn-border-primary hover:text-white hover:underline transition-colors"
+                      >
+                        {link.label}
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -50,6 +59,11 @@ export default function Footer() {
           <Link href="/" className="text-[18px] font-bold text-white hover:no-underline">
             amazon<span className="text-amzn-gold">.in</span>
           </Link>
+          <div className="flex flex-wrap justify-center gap-3 text-[12px] text-gray-400">
+            <Link href="#" className="hover:text-white hover:underline">Conditions of Use & Sale</Link>
+            <Link href="#" className="hover:text-white hover:underline">Privacy Notice</Link>
+            <Link href="#" className="hover:text-white hover:underline">Interest-Based Ads</Link>
+          </div>
           <span className="text-[12px] text-gray-400">
             &copy; {new Date().getFullYear()}, Amazon Clone. All rights reserved.
           </span>

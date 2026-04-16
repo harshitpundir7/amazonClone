@@ -11,19 +11,78 @@ import Price from '@/components/ui/Price';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
 import Skeleton from '@/components/ui/Skeleton';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import { useCartStore } from '@/store/cart-store';
 import { useAuthStore } from '@/store/auth-store';
 import api from '@/lib/api';
 import { formatPrice, getEstimatedDelivery } from '@/lib/utils';
 import type { Address, ShippingAddress, Order } from '@/types';
 
-type PaymentMethod = 'cod' | 'credit_card' | 'debit_card' | 'upi';
+type PaymentMethod = 'cod' | 'credit_card' | 'debit_card' | 'upi' | 'amazon_pay' | 'net_banking';
 
-const PAYMENT_OPTIONS: { value: PaymentMethod; label: string; description: string }[] = [
-  { value: 'cod', label: 'Cash on Delivery', description: 'Pay when your order is delivered' },
-  { value: 'credit_card', label: 'Credit Card', description: 'Visa, Mastercard, Amex' },
-  { value: 'debit_card', label: 'Debit Card', description: 'All major bank debit cards' },
-  { value: 'upi', label: 'UPI', description: 'Google Pay, PhonePe, Paytm, BHIM UPI' },
+interface PaymentOption {
+  value: PaymentMethod;
+  label: string;
+  description: string;
+  disabled?: boolean;
+  badge?: string;
+  extra?: React.ReactNode;
+}
+
+function UpiLogos() {
+  return (
+    <div className="flex items-center gap-2 mt-1.5">
+      {['GPay', 'PhonePe', 'Paytm', 'BHIM'].map((name) => (
+        <span
+          key={name}
+          className="text-[10px] px-1.5 py-0.5 bg-amzn-bg-tertiary border border-amzn-border-primary rounded-amzn-xs text-amzn-text-secondary"
+        >
+          {name}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+const PAYMENT_OPTIONS: PaymentOption[] = [
+  {
+    value: 'amazon_pay',
+    label: 'Amazon Pay Balance',
+    description: 'Amazon Pay balance: ₹0.00',
+    disabled: true,
+    badge: 'Add money',
+  },
+  {
+    value: 'upi',
+    label: 'UPI',
+    description: 'Pay using any UPI app',
+    extra: <UpiLogos />,
+  },
+  {
+    value: 'credit_card',
+    label: 'Credit Card',
+    description: 'Visa, Mastercard, Amex',
+  },
+  {
+    value: 'debit_card',
+    label: 'Debit Card',
+    description: 'All major bank debit cards',
+  },
+  {
+    value: 'net_banking',
+    label: 'Net Banking',
+    description: 'All major banks supported',
+  },
+  {
+    value: 'cod',
+    label: 'Cash on Delivery',
+    description: 'Pay when your order is delivered',
+    extra: (
+      <p className="text-[11px] text-amzn-text-tertiary mt-1">
+        ₹40 delivery fee applies for COD orders
+      </p>
+    ),
+  },
 ];
 
 export default function CheckoutPage() {
@@ -55,14 +114,10 @@ export default function CheckoutPage() {
   }, [fetchCart]);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/login');
-      return;
-    }
     const fetchAddresses = async () => {
       try {
-        const data = await api.get('/addresses');
-        const addrs = data.data || [];
+        const data = await api.get('/addresses') as any;
+        const addrs: Address[] = Array.isArray(data?.data) ? data.data : Array.isArray(data) ? data : [];
         setAddresses(addrs);
         const defaultAddr = addrs.find((a: Address) => a.isDefault);
         if (defaultAddr) {
@@ -118,8 +173,8 @@ export default function CheckoutPage() {
     setShippingAddress(data);
     setShowNewAddress(false);
     // Save address to backend
-    api.post('/addresses', data).then((res) => {
-      const newAddr = res.data as Address;
+    api.post('/addresses', data).then((res: any) => {
+      const newAddr = res?.data as Address;
       if (newAddr) {
         setAddresses((prev) => [...prev, newAddr]);
         setSelectedAddressId(newAddr.id);
@@ -151,7 +206,7 @@ export default function CheckoutPage() {
           quantity: item.quantity,
         })),
       });
-      const order = data.data as Order;
+      const order = (data as any)?.data as Order;
       setOrderData(order);
       setOrderConfirmed(true);
       useCartStore.getState().clearCart();
@@ -229,8 +284,7 @@ export default function CheckoutPage() {
     );
   }
 
-  // Redirect if not authenticated or empty cart
-  if (!isAuthenticated) return null;
+  // Redirect if empty cart
   if (items.length === 0 && !loading) {
     return (
       <div className="min-h-screen bg-white">
@@ -245,6 +299,7 @@ export default function CheckoutPage() {
   }
 
   return (
+    <ProtectedRoute>
     <div className="min-h-screen bg-amzn-bg-secondary">
       {/* Simplified header */}
       <div className="border-b border-amzn-border-primary bg-white">
@@ -364,26 +419,37 @@ export default function CheckoutPage() {
                   {PAYMENT_OPTIONS.map((option) => (
                     <label
                       key={option.value}
-                      className={`flex items-start gap-3 p-4 border rounded-amzn-md cursor-pointer transition-colors ${
-                        paymentMethod === option.value
-                          ? 'border-amzn-input-focus bg-orange-50/30'
-                          : 'border-amzn-border-primary hover:border-amzn-text-tertiary'
+                      className={`flex items-start gap-3 p-4 border rounded-amzn-md transition-colors ${
+                        option.disabled
+                          ? 'opacity-60 cursor-not-allowed bg-amzn-bg-tertiary/50'
+                          : paymentMethod === option.value
+                            ? 'border-amzn-input-focus bg-orange-50/30 cursor-pointer'
+                            : 'border-amzn-border-primary hover:border-amzn-text-tertiary cursor-pointer'
                       }`}
                     >
                       <input
                         type="radio"
                         name="payment"
                         checked={paymentMethod === option.value}
-                        onChange={() => setPaymentMethod(option.value)}
+                        onChange={() => !option.disabled && setPaymentMethod(option.value)}
+                        disabled={option.disabled}
                         className="mt-1 accent-amzn-input-focus"
                       />
                       <div>
-                        <p className="text-[14px] font-bold text-amzn-text-primary">
-                          {option.label}
-                        </p>
+                        <div className="flex items-center gap-2">
+                          <p className="text-[14px] font-bold text-amzn-text-primary">
+                            {option.label}
+                          </p>
+                          {option.badge && (
+                            <span className="text-[11px] text-amzn-teal hover:text-amzn-teal-hover hover:underline cursor-pointer">
+                              {option.badge}
+                            </span>
+                          )}
+                        </div>
                         <p className="text-[13px] text-amzn-text-secondary">
                           {option.description}
                         </p>
+                        {option.extra}
                       </div>
                     </label>
                   ))}
@@ -435,6 +501,9 @@ export default function CheckoutPage() {
                   </div>
                   <p className="text-[14px] text-amzn-text-primary">
                     {PAYMENT_OPTIONS.find((o) => o.value === paymentMethod)?.label || 'Cash on Delivery'}
+                    {paymentMethod === 'cod' && (
+                      <span className="text-[12px] text-amzn-text-tertiary ml-2">(₹40 delivery fee applies)</span>
+                    )}
                   </p>
                 </div>
 
@@ -581,5 +650,6 @@ export default function CheckoutPage() {
         </div>
       </main>
     </div>
+    </ProtectedRoute>
   );
 }

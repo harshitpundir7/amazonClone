@@ -3,7 +3,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 
-type BadgeVariant = "prime" | "amazonChoice" | "discount" | "stock";
+type BadgeVariant = "prime" | "amazonChoice" | "discount" | "stock" | "success" | "warning";
 
 interface BadgeProps {
   variant: BadgeVariant;
@@ -17,6 +17,8 @@ const variantStyles: Record<BadgeVariant, string> = {
     "bg-amzn-text-primary text-white rounded-full px-2.5 py-0.5 text-[12px] font-medium",
   discount: "text-amzn-success text-[14px] font-medium",
   stock: "", // dynamically set below
+  success: "text-amzn-success text-[14px] font-medium",
+  warning: "text-amzn-warning text-[14px] font-medium",
 };
 
 function PrimeIcon() {

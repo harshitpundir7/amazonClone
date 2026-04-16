@@ -41,7 +41,7 @@ services:
     networks:
       - app-network
     command: >
-      sh -c "npx prisma migrate deploy && npx prisma db seed && npm run dev"
+      sh -c "npx prisma db push && npx prisma db seed && npm run dev"
 
   frontend:
     build:

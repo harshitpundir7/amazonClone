@@ -4,14 +4,16 @@ import React from "react";
 import { formatPrice, formatMrp, calculateDiscount } from "@/lib/utils";
 
 interface PriceProps {
-  price: number;
-  mrp?: number;
+  price: number | string;
+  mrp?: number | string | null;
   size?: "sm" | "lg";
 }
 
 export default function Price({ price, mrp, size = "sm" }: PriceProps) {
-  const { whole, fraction } = formatPrice(price);
-  const discount = mrp && mrp > price ? calculateDiscount(mrp, price) : 0;
+  const numPrice = Number(price || 0);
+  const numMrp = mrp != null ? Number(mrp) : 0;
+  const { whole, fraction } = formatPrice(numPrice);
+  const discount = numMrp && numMrp > numPrice ? calculateDiscount(numMrp, numPrice) : 0;
 
   return (
     <div className="flex flex-wrap items-baseline gap-1">
@@ -45,10 +47,10 @@ export default function Price({ price, mrp, size = "sm" }: PriceProps) {
         </span>
       </span>
 
-      {mrp && mrp > price && (
+      {numMrp > numPrice && (
         <>
           <span className="text-[14px] text-amzn-text-secondary line-through">
-            {formatMrp(mrp)}
+            {formatMrp(numMrp)}
           </span>
           {discount > 0 && (
             <span className="text-[14px] font-medium text-amzn-success">

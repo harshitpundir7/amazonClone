@@ -19,8 +19,9 @@ export const useWishlistStore = create<WishlistStore>()((set, get) => ({
   fetchWishlist: async () => {
     set({ loading: true });
     try {
-      const data = await api.get('/wishlist');
-      set({ items: data.data || [], loading: false });
+      const data = await api.get('/wishlist') as any;
+      const items = Array.isArray(data?.data) ? data.data : Array.isArray(data) ? data : [];
+      set({ items, loading: false });
     } catch {
       set({ loading: false });
     }

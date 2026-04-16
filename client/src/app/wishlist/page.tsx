@@ -11,6 +11,7 @@ import Price from '@/components/ui/Price';
 import StarRating from '@/components/ui/StarRating';
 import Button from '@/components/ui/Button';
 import Skeleton from '@/components/ui/Skeleton';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import { useCartStore } from '@/store/cart-store';
 import toast from 'react-hot-toast';
 
@@ -23,8 +24,8 @@ export default function WishlistPage() {
   useEffect(() => {
     const fetchWishlist = async () => {
       try {
-        const res = await api.get('/wishlist');
-        setItems(res.data || []);
+        const res = await api.get('/wishlist') as any;
+        setItems(Array.isArray(res?.data) ? res.data : Array.isArray(res) ? res : []);
       } catch (err) {
         console.error('Failed to fetch wishlist:', err);
       } finally {
@@ -55,9 +56,10 @@ export default function WishlistPage() {
   };
 
   return (
+    <ProtectedRoute>
     <div className="min-h-screen bg-amzn-bg-secondary">
       <Header />
-      <SubNav categories={[]} />
+      <SubNav />
 
       <div className="max-w-amzn-container mx-auto px-6 py-8">
         <h1 className="text-[28px] font-bold text-amzn-text-primary mb-6">Your Wishlist</h1>
@@ -136,5 +138,6 @@ export default function WishlistPage() {
 
       <Footer />
     </div>
+    </ProtectedRoute>
   );
 }

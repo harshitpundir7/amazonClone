@@ -125,16 +125,28 @@ export const productService = {
     return product;
   },
 
-  async search(query: string, filters: ProductSearchInput) {
-    const where: Prisma.ProductWhereInput = {
-      isActive: true,
-      OR: [
-        { name: { contains: query, mode: 'insensitive' } },
-        { shortDesc: { contains: query, mode: 'insensitive' } },
-      ],
-    };
+  async search(filters: ProductSearchInput) {
+    const where: Prisma.ProductWhereInput = { isActive: true };
 
-    if (filters.categoryId) {
+    // Text search (optional)
+    if (filters.q) {
+      where.OR = [
+        { name: { contains: filters.q, mode: 'insensitive' } },
+        { shortDesc: { contains: filters.q, mode: 'insensitive' } },
+      ];
+    }
+
+    // Category by slug (e.g. "mobiles") or by ID
+    if (filters.category) {
+      const cat = await prisma.category.findFirst({
+        where: { slug: { equals: filters.category, mode: 'insensitive' } },
+        include: { children: true },
+      });
+      if (cat) {
+        const catIds = [cat.id, ...cat.children.map(c => c.id)];
+        where.categoryId = { in: catIds };
+      }
+    } else if (filters.categoryId) {
       where.categoryId = filters.categoryId;
     }
 
@@ -149,6 +161,7 @@ export const productService = {
       };
     }
 
+    const orderBy = buildOrderBy(filters.sort);
     const { skip, take, page, limit } = parsePagination({
       page: String(filters.page),
       limit: String(filters.limit),
@@ -158,7 +171,7 @@ export const productService = {
       prisma.product.findMany({
         where,
         include: productListInclude,
-        orderBy: { avgRating: 'desc' },
+        orderBy,
         skip,
         take,
       }),

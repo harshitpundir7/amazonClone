@@ -109,12 +109,14 @@ export const orderService = {
       // 5. Shipping cost: FREE for orders over 499, else 49
       const shippingCost = subtotal > 499 ? 0 : 49;
 
-      // 6. Tax: 18% GST on (subtotal - discount + shipping)
-      const taxableAmount = subtotal - discount + shippingCost;
+      // 6. Tax: 18% GST on (subtotal + shipping)
+      // Note: subtotal is already computed from unitPrice (the discounted sale price),
+      // so discount must NOT be subtracted again — that would double-count it.
+      const taxableAmount = subtotal + shippingCost;
       const tax = Math.round(taxableAmount * 0.18 * 100) / 100;
 
       // 7. Total amount
-      const totalAmount = subtotal - discount + shippingCost + tax;
+      const totalAmount = subtotal + shippingCost + tax;
 
       // 8. Create order with nested order items
       const order = await tx.order.create({

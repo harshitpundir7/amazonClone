@@ -54,9 +54,9 @@ export default function ReviewSection({
 
       {/* Overall rating summary */}
       <div className="flex items-center gap-2 mb-5">
-        <StarRating rating={avgRating} size="lg" />
+        <StarRating rating={Number(avgRating || 0)} size="lg" />
         <span className="text-[14px] text-amzn-text-primary">
-          {avgRating.toFixed(1)} out of 5
+          {Number(avgRating || 0).toFixed(1)} out of 5
         </span>
         <span className="text-[14px] text-amzn-text-secondary">
           {reviewCount.toLocaleString('en-IN')} global ratings

@@ -18,13 +18,17 @@ export const productQuerySchema = z.object({
 
 export const productSearchSchema = z.object({
   query: z.object({
-    q: z.string().min(1, 'Search query is required'),
+    q: z.string().optional(),
+    category: z.string().optional(),
     page: z.coerce.number().int().positive().default(1),
     limit: z.coerce.number().int().positive().max(100).default(20),
     categoryId: z.coerce.number().int().optional(),
     brandId: z.coerce.number().int().optional(),
     minPrice: z.coerce.number().min(0).optional(),
     maxPrice: z.coerce.number().min(0).optional(),
+    sort: z
+      .enum(['featured', 'price_asc', 'price_desc', 'rating', 'newest', 'bestselling'])
+      .default('featured'),
   }),
 });
 

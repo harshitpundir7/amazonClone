@@ -9,7 +9,7 @@ export const placeOrder = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const userId = req.user?.id || 1;
+    const userId = req.user!.id;
     const order = await orderService.placeOrder(userId, req.body);
 
     sendResponse(res, {
@@ -28,7 +28,7 @@ export const getOrders = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const userId = req.user?.id || 1;
+    const userId = req.user!.id;
     const pagination = parsePagination(req.query as Record<string, string>);
     const result = await orderService.findByUser(userId, pagination);
 
@@ -48,7 +48,7 @@ export const getOrder = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const userId = req.user?.id || 1;
+    const userId = req.user!.id;
     const orderId = parseInt(req.params.id, 10);
     const order = await orderService.findById(userId, orderId);
 

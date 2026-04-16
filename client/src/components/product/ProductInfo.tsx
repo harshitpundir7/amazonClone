@@ -50,12 +50,16 @@ export default function ProductInfo({
 
   const [quantity, setQuantity] = useState(1);
   const [addingToCart, setAddingToCart] = useState(false);
+  const [pincode, setPincode] = useState('');
+  const [pincodeResult, setPincodeResult] = useState<{ available: boolean; date: string } | null>(null);
 
   // Compute effective price / mrp from variant or product
-  const effectivePrice =
-    selectedVariant?.priceOverride ?? selectedVariant?.effectivePrice ?? product.basePrice;
-  const effectiveMrp =
-    selectedVariant?.mrpOverride ?? selectedVariant?.effectiveMrp ?? product.mrp;
+  const effectivePrice = Number(
+    selectedVariant?.priceOverride ?? selectedVariant?.effectivePrice ?? product.basePrice ?? 0
+  );
+  const effectiveMrp = Number(
+    selectedVariant?.mrpOverride ?? selectedVariant?.effectiveMrp ?? product.mrp ?? 0
+  );
   const discount = calculateDiscount(effectiveMrp, effectivePrice);
   const deliveryDate = getEstimatedDelivery();
 
@@ -117,6 +121,17 @@ export default function ProductInfo({
     }
   };
 
+  const handlePincodeCheck = () => {
+    if (!/^\d{6}$/.test(pincode)) {
+      setPincodeResult({ available: false, date: '' });
+      return;
+    }
+    // Mock delivery check - pincodes starting with 5 = Bangalore, always available
+    const available = true; // For demo, all pincodes are available
+    const date = getEstimatedDelivery();
+    setPincodeResult({ available, date });
+  };
+
   return (
     <div className="flex flex-col gap-3">
       {/* 1. Breadcrumbs */}
@@ -139,15 +154,15 @@ export default function ProductInfo({
 
       {/* 4. Rating summary */}
       <div className="flex items-center gap-2 flex-wrap">
-        <StarRating rating={product.avgRating} size="md" />
+        <StarRating rating={Number(product.avgRating || 0)} size="md" />
         <span className="text-[14px] text-amzn-teal hover:text-amzn-teal-hover cursor-pointer">
-          {product.avgRating.toFixed(1)} out of 5
+          {Number(product.avgRating || 0).toFixed(1)} out of 5
         </span>
         <a
           href="#reviews"
           className="text-[14px] text-amzn-teal hover:text-amzn-teal-hover hover:underline"
         >
-          {product.reviewCount.toLocaleString('en-IN')} ratings
+          {Number(product.reviewCount || 0).toLocaleString('en-IN')} ratings
         </a>
         {product.isFeatured && (
           <Badge variant="amazonChoice" text="Amazon's Choice" />
@@ -246,7 +261,51 @@ export default function ProductInfo({
         </button>
       </div>
 
-      {/* 11. Secure transaction */}
+      {/* 11. Pincode delivery check */}
+      <div className="text-[14px] mt-1">
+        <div className="flex items-center gap-0.5 mb-1">
+          <span className="text-amzn-text-primary font-medium">Deliver to:</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <input
+            type="text"
+            value={pincode}
+            onChange={(e) => {
+              setPincode(e.target.value.replace(/\D/g, '').slice(0, 6));
+              setPincodeResult(null);
+            }}
+            placeholder="Enter pincode"
+            maxLength={6}
+            className="w-[120px] h-[31px] px-2 text-[13px] border border-amzn-border-primary rounded-amzn-xs focus:outline-none focus:border-[#e77600] focus:shadow-[0_0_3px_#e77600]"
+          />
+          <button
+            onClick={handlePincodeCheck}
+            className="text-[13px] text-amzn-teal hover:text-amzn-teal-hover hover:underline bg-transparent border-0 cursor-pointer px-1 py-1 whitespace-nowrap"
+          >
+            Check
+          </button>
+        </div>
+        {pincodeResult && (
+          <div className="mt-1.5 text-[13px]">
+            {pincodeResult.available ? (
+              <div className="flex items-start gap-1">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="shrink-0 mt-0.5 text-amzn-success">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor" />
+                </svg>
+                <span className="text-amzn-success font-medium">
+                  Delivery by {pincodeResult.date} | <span className="font-bold">FREE Delivery</span>
+                </span>
+              </div>
+            ) : (
+              <span className="text-amzn-error">
+                Delivery is not available for this pincode.
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* 12. Secure transaction */}
       <div className="flex items-center gap-1 text-[13px] text-amzn-text-secondary mt-1">
         <ShieldIcon />
         <span>Secure transaction</span>

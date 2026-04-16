@@ -2,16 +2,18 @@
 
 import React, { useEffect, useState, useCallback, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { X, SlidersHorizontal } from 'lucide-react';
+import { X, SlidersHorizontal, LayoutGrid, List } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import SubNav from '@/components/layout/SubNav';
 import Footer from '@/components/layout/Footer';
 import SearchFilters from '@/components/search/SearchFilters';
 import SortDropdown from '@/components/search/SortDropdown';
 import ProductGrid from '@/components/product/ProductGrid';
+import ProductCard from '@/components/product/ProductCard';
 import Skeleton from '@/components/ui/Skeleton';
+import Price from '@/components/ui/Price';
 import api from '@/lib/api';
-import type { Product, Category, SearchFilters as FilterState, PaginatedResponse } from '@/types';
+import type { Product, Category, SearchFilters as FilterState } from '@/types';
 
 function SearchContent() {
   const searchParams = useSearchParams();
@@ -31,6 +33,7 @@ function SearchContent() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   const filters: FilterState = {
     q: q || undefined,
@@ -43,11 +46,25 @@ function SearchContent() {
     limit: 24,
   };
 
+  // Compute active filter tags
+  const activeFilterTags: { key: string; label: string; param: string }[] = [];
+  if (categorySlug) {
+    const cat = categories.find((c) => c.slug === categorySlug);
+    activeFilterTags.push({ key: 'category', label: cat?.name || categorySlug, param: 'category' });
+  }
+  if (minPrice !== undefined || maxPrice !== undefined) {
+    const label = `₹${minPrice || 0} - ₹${maxPrice || '+'}`;
+    activeFilterTags.push({ key: 'price', label, param: 'price' });
+  }
+  if (rating !== undefined) {
+    activeFilterTags.push({ key: 'rating', label: `${rating}★ & Up`, param: 'rating' });
+  }
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const data = await api.get('/categories');
-        setCategories(data.data || []);
+        const data = await api.get('/categories') as any;
+        setCategories(data?.data?.categories || []);
       } catch {
         // silently fail
       }
@@ -68,11 +85,11 @@ function SearchContent() {
       params.set('page', String(currentPage));
       params.set('limit', '24');
 
-      const data = await api.get(`/products/search?${params.toString()}`);
-      const result = data.data as PaginatedResponse<Product>;
-      setProducts(result?.data || []);
-      setTotalResults(result?.total || 0);
-      setTotalPages(result?.totalPages || 1);
+      const data = await api.get(`/products/search?${params.toString()}`) as any;
+      const result = data?.data;
+      setProducts(result?.products || []);
+      setTotalResults(result?.pagination?.total || 0);
+      setTotalPages(result?.pagination?.totalPages || 1);
     } catch {
       setProducts([]);
       setTotalResults(0);
@@ -108,6 +125,18 @@ function SearchContent() {
   const handlePageChange = (page: number) => {
     updateURL({ ...filters, page });
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const removeFilterTag = (param: string) => {
+    const newFilters = { ...filters, page: 1 };
+    if (param === 'category') delete newFilters.category;
+    if (param === 'price') { delete newFilters.minPrice; delete newFilters.maxPrice; }
+    if (param === 'rating') delete newFilters.rating;
+    updateURL(newFilters);
+  };
+
+  const clearAllFilters = () => {
+    updateURL({ q: q || undefined, sort, page: 1, limit: 24 });
   };
 
   const startItem = (currentPage - 1) * 24 + 1;
@@ -170,7 +199,7 @@ function SearchContent() {
                     {totalResults > 0 ? (
                       <>
                         {startItem}-{endItem} of {totalResults} results for{' '}
-                        <span className="font-bold">&quot;{q}&quot;</span>
+                        <span className="font-bold">&quot;{q || 'all products'}&quot;</span>
                       </>
                     ) : (
                       <>No results for &quot;{q}&quot;</>
@@ -178,8 +207,51 @@ function SearchContent() {
                   </p>
                 )}
               </div>
-              <SortDropdown value={sort} onChange={handleSortChange} />
+              <div className="flex items-center gap-2">
+                {/* Grid/List Toggle */}
+                <div className="flex border border-amzn-border-primary rounded-amzn-lg overflow-hidden">
+                  <button
+                    onClick={() => setViewMode('grid')}
+                    className={`p-1.5 cursor-pointer border-0 ${viewMode === 'grid' ? 'bg-amzn-bg-tertiary' : 'bg-white hover:bg-gray-50'}`}
+                  >
+                    <LayoutGrid className="w-4 h-4 text-amzn-text-primary" />
+                  </button>
+                  <button
+                    onClick={() => setViewMode('list')}
+                    className={`p-1.5 cursor-pointer border-0 ${viewMode === 'list' ? 'bg-amzn-bg-tertiary' : 'bg-white hover:bg-gray-50'}`}
+                  >
+                    <List className="w-4 h-4 text-amzn-text-primary" />
+                  </button>
+                </div>
+                <SortDropdown value={sort} onChange={handleSortChange} />
+              </div>
             </div>
+
+            {/* Active filter tags */}
+            {activeFilterTags.length > 0 && (
+              <div className="flex items-center flex-wrap gap-2 mb-3">
+                {activeFilterTags.map((tag) => (
+                  <span
+                    key={tag.key}
+                    className="inline-flex items-center gap-1 bg-[#e6f3f7] text-amzn-teal text-[12px] px-2 py-0.5 rounded-amzn-xs border border-[#b8d9e3]"
+                  >
+                    {tag.label}
+                    <button
+                      onClick={() => removeFilterTag(tag.param)}
+                      className="hover:text-amzn-teal-hover cursor-pointer bg-transparent border-0 p-0"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                ))}
+                <button
+                  onClick={clearAllFilters}
+                  className="text-[13px] text-amzn-teal hover:text-amzn-teal-hover hover:underline cursor-pointer bg-transparent border-0 p-0"
+                >
+                  Clear all
+                </button>
+              </div>
+            )}
 
             {/* Mobile filter button */}
             <button
@@ -190,8 +262,29 @@ function SearchContent() {
               Filters
             </button>
 
-            {/* Product Grid */}
-            <ProductGrid products={products} loading={loading} />
+            {/* Product Grid / List */}
+            {viewMode === 'grid' ? (
+              <ProductGrid products={products} loading={loading} />
+            ) : (
+              <div className="divide-y divide-amzn-border-secondary">
+                {loading ? (
+                  Array.from({ length: 4 }).map((_, i) => (
+                    <div key={i} className="flex gap-4 py-4">
+                      <Skeleton className="w-[200px] h-[200px]" />
+                      <div className="flex-1">
+                        <Skeleton className="h-4 w-3/4 mb-2" />
+                        <Skeleton className="h-4 w-1/2 mb-2" />
+                        <Skeleton className="h-4 w-1/4" />
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  products.map((product) => (
+                    <ProductListItem key={product.id} product={product} />
+                  ))
+                )}
+              </div>
+            )}
 
             {/* No results */}
             {!loading && totalResults === 0 && q && (
@@ -207,14 +300,14 @@ function SearchContent() {
 
             {/* Pagination */}
             {!loading && totalResults > 0 && totalPages > 1 && (
-              <div className="flex items-center justify-center gap-2 py-6 border-t border-amzn-border-primary mt-4">
+              <div className="flex items-center justify-center gap-1 py-6 border-t border-amzn-border-primary mt-4">
                 <button
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage <= 1}
-                  className={`px-3 py-1.5 text-[13px] rounded-amzn-lg border border-amzn-border-primary cursor-pointer ${
+                  className={`px-3 py-1.5 text-[13px] rounded-l-amzn-lg border border-amzn-border-primary cursor-pointer ${
                     currentPage <= 1
                       ? 'text-amzn-text-tertiary border-amzn-border-secondary cursor-not-allowed'
-                      : 'text-amzn-teal hover:bg-amzn-bg-tertiary'
+                      : 'text-amzn-teal hover:bg-[#FFEBC1]'
                   }`}
                 >
                   Previous
@@ -236,10 +329,10 @@ function SearchContent() {
                     <button
                       key={pageNum}
                       onClick={() => handlePageChange(pageNum)}
-                      className={`w-8 h-8 text-[13px] rounded-amzn-lg border cursor-pointer ${
+                      className={`w-8 h-8 text-[13px] border cursor-pointer ${
                         currentPage === pageNum
-                          ? 'bg-amzn-dark-nav text-white border-amzn-dark-nav'
-                          : 'border-amzn-border-primary text-amzn-teal hover:bg-amzn-bg-tertiary'
+                          ? 'bg-[#FFEBC1] border-[#e77600] font-bold text-amzn-text-primary'
+                          : 'border-amzn-border-primary text-amzn-teal hover:bg-[#FFEBC1]'
                       }`}
                     >
                       {pageNum}
@@ -250,10 +343,10 @@ function SearchContent() {
                 <button
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage >= totalPages}
-                  className={`px-3 py-1.5 text-[13px] rounded-amzn-lg border border-amzn-border-primary cursor-pointer ${
+                  className={`px-3 py-1.5 text-[13px] rounded-r-amzn-lg border border-amzn-border-primary cursor-pointer ${
                     currentPage >= totalPages
                       ? 'text-amzn-text-tertiary border-amzn-border-secondary cursor-not-allowed'
-                      : 'text-amzn-teal hover:bg-amzn-bg-tertiary'
+                      : 'text-amzn-teal hover:bg-[#FFEBC1]'
                   }`}
                 >
                   Next
@@ -265,6 +358,70 @@ function SearchContent() {
       </main>
 
       <Footer />
+    </div>
+  );
+}
+
+/* List view item component */
+import StarRating from '@/components/ui/StarRating';
+import Badge from '@/components/ui/Badge';
+import Image from 'next/image';
+import Link from 'next/link';
+
+function ProductListItem({ product }: { product: Product }) {
+  const imageUrl = product.images?.[0]?.imageUrl || '/placeholder.png';
+
+  return (
+    <div className="flex gap-4 py-4">
+      {/* Image */}
+      <Link href={`/product/${product.id}`} className="shrink-0 w-[200px] h-[200px] flex items-center justify-center">
+        <Image
+          src={imageUrl}
+          alt={product.name}
+          width={200}
+          height={200}
+          className="max-h-[200px] max-w-[200px] object-contain"
+        />
+      </Link>
+
+      {/* Details */}
+      <div className="flex-1 min-w-0">
+        <Link
+          href={`/product/${product.id}`}
+          className="text-[15px] text-amzn-teal hover:text-amzn-teal-hover hover:underline line-clamp-2 leading-5 block mb-1"
+        >
+          {product.name}
+        </Link>
+        <div className="mb-1">
+          <StarRating
+            rating={Number(product.avgRating || 0)}
+            size="sm"
+            count={product.reviewCount}
+            showCount
+          />
+        </div>
+        <div className="mb-1">
+          <Price price={Number(product.basePrice || 0)} mrp={Number(product.mrp || 0)} size="sm" />
+        </div>
+        <div className="mb-1">
+          <Badge variant="prime" />
+        </div>
+        {product.shortDesc && (
+          <p className="text-[13px] text-amzn-text-secondary line-clamp-2">
+            {product.shortDesc}
+          </p>
+        )}
+      </div>
+
+      {/* Actions */}
+      <div className="shrink-0 w-[180px] flex flex-col items-end gap-2">
+        <Link
+          href={`/product/${product.id}`}
+          className="w-full bg-amzn-cart-btn hover:bg-amzn-cart-btn-hover border border-amzn-cart-btn-border rounded-amzn-lg py-1.5 text-[13px] font-semibold text-amzn-text-primary text-center shadow-[0_1px_0_rgba(255,255,255,0.4)_inset]"
+        >
+          Add to Cart
+        </Link>
+      </div>
     </div>
   );
 }

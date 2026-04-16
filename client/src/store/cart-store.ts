@@ -30,8 +30,8 @@ export const useCartStore = create<CartStore>()(
       fetchCart: async () => {
         set({ loading: true, error: null });
         try {
-          const data = await api.get('/cart');
-          set({ items: data.data.items || [], loading: false });
+          const data = await api.get('/cart') as any;
+          set({ items: data?.data?.items || [], loading: false });
         } catch (err) {
           set({ error: (err as Error).message, loading: false });
         }
@@ -40,7 +40,9 @@ export const useCartStore = create<CartStore>()(
       addItem: async (productId, variantId = null, quantity = 1) => {
         set({ loading: true, error: null });
         try {
-          await api.post('/cart/items', { productId, variantId, quantity });
+          const payload: Record<string, unknown> = { productId, quantity };
+          if (variantId != null) payload.variantId = variantId;
+          await api.post('/cart/items', payload);
           await get().fetchCart();
         } catch (err) {
           set({ error: (err as Error).message, loading: false });

@@ -1,8 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
-import { CATEGORY_NAV_LINKS } from "@/lib/constants";
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import MobileDrawer from "./MobileDrawer";
+import api from "@/lib/api";
+
+interface TopCategory {
+  id: number;
+  name: string;
+  slug: string;
+}
 
 function MenuIcon() {
   return (
@@ -22,8 +29,27 @@ function MenuIcon() {
 const navItemBase =
   "flex items-center border border-transparent hover:border-white rounded-amzn-xs px-2 py-1 cursor-pointer transition-colors";
 
+// Static links that are always shown (Amazon standard nav items)
+const STATIC_LINKS = [
+  { label: "Today's Deals", href: "/search?sort=price_asc" },
+  { label: "Customer Service", href: "#" },
+];
+
 export default function SubNav() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [categories, setCategories] = useState<TopCategory[]>([]);
+
+  useEffect(() => {
+    api.get("/categories")
+      .then((res: any) => {
+        const cats = res.data?.categories || res.categories || res.data || [];
+        const topLevel = cats
+          .filter((c: any) => !c.parentId)
+          .map((c: any) => ({ id: c.id, name: c.name, slug: c.slug }));
+        setCategories(topLevel);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <>
@@ -38,24 +64,38 @@ export default function SubNav() {
             <span className="ml-1 text-[14px]">All</span>
           </button>
 
-          {/* Category links */}
+          {/* Static nav links */}
           <div className="flex items-center gap-0.5 overflow-x-auto">
-            {CATEGORY_NAV_LINKS.map((link) => (
-              <a
-                key={link}
-                href="#"
+            {STATIC_LINKS.map((link) => (
+              <Link
+                key={link.label}
+                href={link.href}
                 className="whitespace-nowrap text-[14px] text-white border border-transparent hover:border-white rounded-amzn-xs px-2 py-1 cursor-pointer transition-colors"
               >
-                {link}
-              </a>
+                {link.label}
+              </Link>
+            ))}
+
+            {/* Dynamic category links */}
+            {categories.map((cat) => (
+              <Link
+                key={cat.id}
+                href={`/category/${cat.slug}`}
+                className="whitespace-nowrap text-[14px] text-white border border-transparent hover:border-white rounded-amzn-xs px-2 py-1 cursor-pointer transition-colors"
+              >
+                {cat.name}
+              </Link>
             ))}
           </div>
 
           {/* Right promotional text */}
           <div className="ml-auto shrink-0">
-            <span className="text-[13px] italic text-gray-300">
+            <Link
+              href="/search?sort=price_asc"
+              className="text-[13px] italic text-gray-300 hover:text-white"
+            >
               Shop deals in Electronics
-            </span>
+            </Link>
           </div>
         </div>
       </nav>

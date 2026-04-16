@@ -47,8 +47,8 @@ export default function CategoryPage() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const data = await api.get('/categories');
-        setAllCategories(data.data || []);
+        const data = await api.get('/categories') as any;
+        setAllCategories(data?.data?.categories || []);
       } catch {
         // silently fail
       }
@@ -59,8 +59,8 @@ export default function CategoryPage() {
   useEffect(() => {
     const fetchCategory = async () => {
       try {
-        const data = await api.get(`/categories/${slug}`);
-        setCategory(data.data || null);
+        const data = await api.get(`/categories/${slug}`) as any;
+        setCategory(data?.data?.category || null);
       } catch {
         setCategory(null);
       }
@@ -86,11 +86,11 @@ export default function CategoryPage() {
       queryParams.set('page', String(currentPage));
       queryParams.set('limit', '24');
 
-      const data = await api.get(`/products?${queryParams.toString()}`);
-      const result = data.data as PaginatedResponse<Product>;
-      setProducts(result?.data || []);
-      setTotalResults(result?.total || 0);
-      setTotalPages(result?.totalPages || 1);
+      const data = await api.get(`/products?${queryParams.toString()}`) as any;
+      const result = data?.data;
+      setProducts(result?.products || []);
+      setTotalResults(result?.pagination?.total || 0);
+      setTotalPages(result?.pagination?.totalPages || 1);
     } catch {
       setProducts([]);
       setTotalResults(0);

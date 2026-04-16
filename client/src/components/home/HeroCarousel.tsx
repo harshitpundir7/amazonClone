@@ -3,26 +3,26 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
+import Link from 'next/link';
+
 const HERO_SLIDES = [
   {
     id: 1,
-    image: 'https://picsum.photos/seed/hero1/1500/500',
+    image: '/images/landing/landing_1.jpg',
     alt: 'Great deals on Electronics',
+    link: '/category/electronics',
   },
   {
     id: 2,
-    image: 'https://picsum.photos/seed/hero2/1500/500',
+    image: '/images/landing/landing_2.png',
     alt: 'Shop Fashion essentials',
+    link: '/category/clothing',
   },
   {
     id: 3,
-    image: 'https://picsum.photos/seed/hero3/1500/500',
-    alt: 'Home & Kitchen sale',
-  },
-  {
-    id: 4,
-    image: 'https://picsum.photos/seed/hero4/1500/500',
-    alt: 'Books and more',
+    image: '/images/landing/landing_3.jpg',
+    alt: 'Home & Kitchen deals',
+    link: '/category/home-kitchen',
   },
 ];
 
@@ -56,13 +56,13 @@ export default function HeroCarousel() {
         style={{ transform: `translateX(-${current * 100}%)` }}
       >
         {HERO_SLIDES.map((slide) => (
-          <div key={slide.id} className="min-w-full h-full relative flex-shrink-0">
+          <Link key={slide.id} href={slide.link} className="min-w-full h-full relative flex-shrink-0 block">
             <img
               src={slide.image}
               alt={slide.alt}
               className="w-full h-full object-cover"
             />
-          </div>
+          </Link>
         ))}
       </div>
 

@@ -16,13 +16,43 @@ import { useCartStore } from '@/store/cart-store';
 import { formatPrice } from '@/lib/utils';
 import type { CartItem } from '@/types';
 
+// Local storage key for saved-for-later items
+const SAVED_KEY = 'amazon_saved_for_later';
+
+interface SavedItem {
+  id: number;
+  productId: number;
+  product: CartItem['product'];
+  variant: CartItem['variant'];
+  effectivePrice: number;
+  quantity: number;
+}
+
+function getSavedItems(): SavedItem[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const data = localStorage.getItem(SAVED_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveSavedItems(items: SavedItem[]) {
+  try {
+    localStorage.setItem(SAVED_KEY, JSON.stringify(items));
+  } catch {}
+}
+
 export default function CartPage() {
-  const { items, loading, fetchCart, updateQuantity, removeItem } = useCartStore();
+  const { items, loading, fetchCart, updateQuantity, removeItem, addItem } = useCartStore();
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [giftChecked, setGiftChecked] = useState(false);
+  const [savedItems, setSavedItems] = useState<SavedItem[]>([]);
 
   useEffect(() => {
     fetchCart();
+    setSavedItems(getSavedItems());
   }, [fetchCart]);
 
   // Select all items by default when items load
@@ -51,6 +81,34 @@ export default function CartPage() {
 
   const deselectAll = () => {
     setSelectedIds(new Set());
+  };
+
+  const handleSaveForLater = (item: CartItem) => {
+    const saved: SavedItem = {
+      id: item.id,
+      productId: item.productId,
+      product: item.product,
+      variant: item.variant,
+      effectivePrice: item.effectivePrice,
+      quantity: item.quantity,
+    };
+    const updated = [...savedItems, saved];
+    setSavedItems(updated);
+    saveSavedItems(updated);
+    removeItem(item.id);
+  };
+
+  const handleMoveToCart = (saved: SavedItem) => {
+    addItem(saved.productId, null, saved.quantity);
+    const updated = savedItems.filter((s) => s.id !== saved.id);
+    setSavedItems(updated);
+    saveSavedItems(updated);
+  };
+
+  const handleRemoveSaved = (saved: SavedItem) => {
+    const updated = savedItems.filter((s) => s.id !== saved.id);
+    setSavedItems(updated);
+    saveSavedItems(updated);
   };
 
   const selectedItems = items.filter((item) => selectedIds.has(item.id));
@@ -89,7 +147,7 @@ export default function CartPage() {
       <SubNav />
 
       <main className="mx-auto max-w-amzn-container px-4 py-6">
-        {items.length === 0 ? (
+        {items.length === 0 && savedItems.length === 0 ? (
           /* Empty Cart State */
           <div className="bg-white rounded-amzn-md p-8 text-center">
             <ShoppingCart className="w-16 h-16 text-amzn-text-tertiary mx-auto mb-4" />
@@ -115,7 +173,6 @@ export default function CartPage() {
             </div>
           </div>
         ) : (
-          /* Cart with Items */
           <div className="flex flex-col lg:flex-row gap-5">
             {/* Left: Cart Items */}
             <div className="flex-[7]">
@@ -139,18 +196,21 @@ export default function CartPage() {
               </div>
 
               {/* Cart Items List */}
-              <div className="bg-white rounded-amzn-md divide-y divide-amzn-border-primary">
-                {items.map((item) => (
-                  <CartRow
-                    key={item.id}
-                    item={item}
-                    selected={selectedIds.has(item.id)}
-                    onToggleSelect={() => toggleSelect(item.id)}
-                    onQuantityChange={(qty) => updateQuantity(item.id, qty)}
-                    onRemove={() => removeItem(item.id)}
-                  />
-                ))}
-              </div>
+              {items.length > 0 && (
+                <div className="bg-white rounded-amzn-md divide-y divide-amzn-border-primary">
+                  {items.map((item) => (
+                    <CartRow
+                      key={item.id}
+                      item={item}
+                      selected={selectedIds.has(item.id)}
+                      onToggleSelect={() => toggleSelect(item.id)}
+                      onQuantityChange={(qty) => updateQuantity(item.id, qty)}
+                      onRemove={() => removeItem(item.id)}
+                      onSaveForLater={() => handleSaveForLater(item)}
+                    />
+                  ))}
+                </div>
+              )}
 
               {/* Subtotal bottom */}
               <div className="py-4 text-right">
@@ -159,6 +219,25 @@ export default function CartPage() {
                   <span className="font-bold">{subtotalFormatted}</span>
                 </span>
               </div>
+
+              {/* Saved for Later Section */}
+              {savedItems.length > 0 && (
+                <>
+                  <h2 className="text-[20px] font-bold text-amzn-text-primary mt-6 mb-3">
+                    Saved for Later ({savedItems.length})
+                  </h2>
+                  <div className="bg-white rounded-amzn-md divide-y divide-amzn-border-primary">
+                    {savedItems.map((saved) => (
+                      <SavedRow
+                        key={saved.id}
+                        item={saved}
+                        onMoveToCart={() => handleMoveToCart(saved)}
+                        onRemove={() => handleRemoveSaved(saved)}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Right: Cart Summary Sidebar */}
@@ -215,9 +294,10 @@ interface CartRowProps {
   onToggleSelect: () => void;
   onQuantityChange: (qty: number) => void;
   onRemove: () => void;
+  onSaveForLater: () => void;
 }
 
-function CartRow({ item, selected, onToggleSelect, onQuantityChange, onRemove }: CartRowProps) {
+function CartRow({ item, selected, onToggleSelect, onQuantityChange, onRemove, onSaveForLater }: CartRowProps) {
   const product = item.product;
   const price = item.effectivePrice || product?.basePrice || 0;
   const { formatted: priceFormatted } = formatPrice(price * item.quantity);
@@ -293,8 +373,11 @@ function CartRow({ item, selected, onToggleSelect, onQuantityChange, onRemove }:
           >
             Delete
           </button>
-          <span className="text-amzn-border-primary">|</span>
-          <button className="text-amzn-teal hover:text-amzn-teal-hover hover:underline cursor-pointer bg-transparent border-0 p-0">
+          <span className="text-amzn-border-primary hidden sm:inline">|</span>
+          <button
+            onClick={onSaveForLater}
+            className="text-amzn-teal hover:text-amzn-teal-hover hover:underline cursor-pointer bg-transparent border-0 p-0"
+          >
             Save for Later
           </button>
         </div>
@@ -308,6 +391,74 @@ function CartRow({ item, selected, onToggleSelect, onQuantityChange, onRemove }:
             ({formatPrice(price).formatted} x {item.quantity})
           </p>
         )}
+      </div>
+    </div>
+  );
+}
+
+/* Saved for Later Row */
+interface SavedRowProps {
+  item: SavedItem;
+  onMoveToCart: () => void;
+  onRemove: () => void;
+}
+
+function SavedRow({ item, onMoveToCart, onRemove }: SavedRowProps) {
+  const product = item.product;
+  const price = item.effectivePrice || product?.basePrice || 0;
+  const imageUrl = product?.images?.[0]?.imageUrl || `/placeholder.png`;
+
+  return (
+    <div className="flex items-start gap-4 py-4 px-4">
+      {/* Product Image */}
+      <Link
+        href={`/product/${item.productId}`}
+        className="shrink-0 w-[140px] h-[140px] flex items-center justify-center"
+      >
+        <Image
+          src={imageUrl}
+          alt={product?.name || 'Product'}
+          width={140}
+          height={140}
+          className="max-h-[140px] max-w-[140px] object-contain"
+        />
+      </Link>
+
+      {/* Product Info */}
+      <div className="flex-1 min-w-0">
+        <Link
+          href={`/product/${item.productId}`}
+          className="text-[14px] text-amzn-teal hover:text-amzn-teal-hover hover:underline line-clamp-2 leading-5 block mb-1"
+        >
+          {product?.name || 'Product'}
+        </Link>
+
+        {item.variant && (
+          <p className="text-[13px] text-amzn-text-secondary mb-1">
+            {item.variant.variantName}
+          </p>
+        )}
+
+        <div className="flex items-center flex-wrap gap-x-3 gap-y-1 text-[13px] mt-2">
+          <button
+            onClick={onMoveToCart}
+            className="text-amzn-teal hover:text-amzn-teal-hover hover:underline cursor-pointer bg-transparent border-0 p-0"
+          >
+            Move to Cart
+          </button>
+          <span className="text-amzn-border-primary">|</span>
+          <button
+            onClick={onRemove}
+            className="text-amzn-teal hover:text-amzn-teal-hover hover:underline cursor-pointer bg-transparent border-0 p-0"
+          >
+            Remove
+          </button>
+        </div>
+      </div>
+
+      {/* Price */}
+      <div className="shrink-0 text-right">
+        <Price price={price} mrp={product?.mrp} size="sm" />
       </div>
     </div>
   );

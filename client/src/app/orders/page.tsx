@@ -10,6 +10,7 @@ import type { Order } from '@/types';
 import { formatMrp } from '@/lib/utils';
 import Badge from '@/components/ui/Badge';
 import Skeleton from '@/components/ui/Skeleton';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 
 const STATUS_COLORS: Record<string, 'success' | 'warning' | 'stock'> = {
   pending: 'warning',
@@ -28,8 +29,9 @@ export default function OrdersPage() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await api.get('/orders');
-        setOrders(res.data?.data || res.data || []);
+        const res = await api.get('/orders') as any;
+        const fetched: any[] = res?.data?.orders ?? res?.orders ?? [];
+        setOrders(Array.isArray(fetched) ? fetched : []);
       } catch (err) {
         console.error('Failed to fetch orders:', err);
       } finally {
@@ -40,9 +42,10 @@ export default function OrdersPage() {
   }, []);
 
   return (
+    <ProtectedRoute>
     <div className="min-h-screen bg-amzn-bg-secondary">
       <Header />
-      <SubNav categories={[]} />
+      <SubNav />
 
       <div className="max-w-amzn-container mx-auto px-6 py-8">
         <h1 className="text-[28px] font-bold text-amzn-text-primary mb-6">Your Orders</h1>
@@ -146,5 +149,6 @@ export default function OrdersPage() {
 
       <Footer />
     </div>
+    </ProtectedRoute>
   );
 }
