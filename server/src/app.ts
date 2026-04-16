@@ -55,7 +55,7 @@ app.use((_req, res) => {
 app.use(errorHandler);
 
 // ── Start server ───────────────────────────────────────────────────────────
-app.listen(env.PORT, () => {
+app.listen(env.PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${env.PORT} in ${env.NODE_ENV} mode`);
 });
 

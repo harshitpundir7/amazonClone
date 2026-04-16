@@ -4,10 +4,10 @@ import { z } from 'zod';
 dotenv.config();
 
 const envSchema = z.object({
-  DATABASE_URL: z.string().url('DATABASE_URL must be a valid database connection string'),
+  DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
   JWT_SECRET: z.string().min(1, 'JWT_SECRET is required'),
   PORT: z.coerce.number().int().positive().default(5000),
-  CLIENT_URL: z.string().url().default('http://localhost:3000'),
+  CLIENT_URL: z.string().min(1).default('http://localhost:3000'),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 });
 
