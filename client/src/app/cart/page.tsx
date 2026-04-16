@@ -24,7 +24,7 @@ interface SavedItem {
   productId: number;
   product: CartItem['product'];
   variant: CartItem['variant'];
-  effectivePrice: number;
+  effectivePrice?: number;
   quantity: number;
 }
 
@@ -89,7 +89,7 @@ export default function CartPage() {
       productId: item.productId,
       product: item.product,
       variant: item.variant,
-      effectivePrice: item.effectivePrice ?? item.product?.basePrice ?? 0,
+      effectivePrice: item.effectivePrice,
       quantity: item.quantity,
     };
     const updated = [...savedItems, saved];
