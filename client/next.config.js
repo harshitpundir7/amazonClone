@@ -1,9 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
-  typescript: {
-    ignoreBuildErrors: true,
-  },
   images: {
     remotePatterns: [
       {
@@ -13,12 +10,6 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'via.placeholder.com',
-      },
-      {
-        protocol: 'http',
-        hostname: 'localhost',
-        port: '5000',
-        pathname: '/uploads/**',
       },
       {
         protocol: 'https',

@@ -20,29 +20,6 @@ services:
       timeout: 5s
       retries: 5
 
-  backend:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
-    container_name: amazon-clone-api
-    ports:
-      - '5000:5000'
-    environment:
-      NODE_ENV: development
-      PORT: 5000
-      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/amazon_clone
-      JWT_SECRET: amazon-clone-dev-secret-key-2024
-      CLIENT_URL: http://localhost:3000
-    volumes:
-      - ./server/uploads:/app/uploads
-    depends_on:
-      postgres:
-        condition: service_healthy
-    networks:
-      - app-network
-    command: >
-      sh -c "npx prisma db push && npx prisma db seed && npm run dev"
-
   frontend:
     build:
       context: ./client
@@ -51,15 +28,19 @@ services:
     ports:
       - '3000:3000'
     environment:
-      NEXT_PUBLIC_API_URL: http://localhost:5000/api
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/amazon_clone
+      JWT_SECRET: amazon-clone-dev-secret-key-2024
+      NODE_ENV: development
     volumes:
       - ./client/src:/app/src
       - ./client/public:/app/public
     depends_on:
-      - backend
+      postgres:
+        condition: service_healthy
     networks:
       - app-network
-    command: npm run dev
+    command: >
+      sh -c "npx prisma db push && npx prisma db seed && npm run dev"
 
 volumes:
   postgres_data:
