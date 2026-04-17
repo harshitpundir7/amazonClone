@@ -66,6 +66,7 @@ const config: Config = {
       spacing: {
         'nav-height': '60px',
         'subnav-height': '40px',
+        'nav-total': '100px',
       },
     },
   },

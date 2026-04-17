@@ -8,7 +8,7 @@ import Link from 'next/link';
 const HERO_SLIDES = [
   {
     id: 1,
-    image: '/images/landing/landing_1.jpg',
+    image: '/images/landing/landing_1.png',
     alt: 'Great deals on Electronics',
     link: '/category/electronics',
   },
@@ -46,7 +46,7 @@ export default function HeroCarousel() {
 
   return (
     <div
-      className="relative w-full h-[200px] sm:h-[350px] md:h-[500px] overflow-hidden group"
+      className="relative w-full h-[300px] sm:h-[450px] md:h-[600px] overflow-hidden group"
       onMouseEnter={() => setIsAutoPlaying(false)}
       onMouseLeave={() => setIsAutoPlaying(true)}
     >
@@ -56,7 +56,7 @@ export default function HeroCarousel() {
         style={{ transform: `translateX(-${current * 100}%)` }}
       >
         {HERO_SLIDES.map((slide) => (
-          <Link key={slide.id} href={slide.link} className="min-w-full h-full relative flex-shrink-0 block">
+          <Link key={slide.id} href={slide.link} className="mt-28 min-w-full h-full relative flex-shrink-0 block">
             <img
               src={slide.image}
               alt={slide.alt}
@@ -91,9 +91,8 @@ export default function HeroCarousel() {
           <button
             key={idx}
             onClick={() => setCurrent(idx)}
-            className={`w-2 h-2 rounded-full transition-colors ${
-              idx === current ? 'bg-[#333]' : 'bg-[#999]'
-            }`}
+            className={`w-2 h-2 rounded-full transition-colors ${idx === current ? 'bg-[#333]' : 'bg-[#999]'
+              }`}
             aria-label={`Go to slide ${idx + 1}`}
           />
         ))}

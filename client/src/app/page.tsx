@@ -52,7 +52,7 @@ export default function HomePage() {
       <Header />
       <SubNav />
 
-      <main>
+      <main className="-mt-nav-total">
         {/* Hero Carousel */}
         <HeroCarousel />
 
