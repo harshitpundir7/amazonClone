@@ -89,40 +89,40 @@ async function main() {
           { id: 9, name: "Grocery", slug: "grocery", parentId: null, sortOrder: 9, imageUrl: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=400&h=300&fit=crop" },
           { id: 10, name: "Office Products", slug: "office-products", parentId: null, sortOrder: 10, imageUrl: "https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?w=400&h=300&fit=crop" },
           // Level 2: Under Electronics
-          { id: 11, name: "Smartphones", slug: "smartphones", parentId: 1, sortOrder: 1, imageUrl: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop" },
-          { id: 12, name: "Laptops", slug: "laptops", parentId: 1, sortOrder: 2, imageUrl: "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=400&h=300&fit=crop" },
+          { id: 11, name: "Smartphones", slug: "smartphones", parentId: 1, sortOrder: 1, imageUrl: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa7?w=400&h=300&fit=crop" },
+          { id: 12, name: "Laptops", slug: "laptops", parentId: 1, sortOrder: 2, imageUrl: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&h=300&fit=crop" },
           { id: 13, name: "Headphones", slug: "headphones", parentId: 1, sortOrder: 3, imageUrl: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop" },
-          { id: 14, name: "Televisions", slug: "televisions", parentId: 1, sortOrder: 4, imageUrl: "https://images.unsplash.com/photo-1587826080692-f439cd0b70da?w=400&h=300&fit=crop" },
+          { id: 14, name: "Televisions", slug: "televisions", parentId: 1, sortOrder: 4, imageUrl: "https://images.unsplash.com/photo-1593359677879-a6e3233ad4e2?w=400&h=300&fit=crop" },
           // Level 2: Under Clothing
           { id: 15, name: "Men", slug: "mens-clothing", parentId: 2, sortOrder: 1, imageUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop" },
           { id: 16, name: "Women", slug: "womens-clothing", parentId: 2, sortOrder: 2, imageUrl: "https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=400&h=300&fit=crop" },
           // Level 3: Under Men
-          { id: 17, name: "T-Shirts", slug: "mens-tshirts", parentId: 15, sortOrder: 1 },
-          { id: 18, name: "Jeans", slug: "mens-jeans", parentId: 15, sortOrder: 2 },
+          { id: 17, name: "T-Shirts", slug: "mens-tshirts", parentId: 15, sortOrder: 1, imageUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop" },
+          { id: 18, name: "Jeans", slug: "mens-jeans", parentId: 15, sortOrder: 2, imageUrl: "https://images.unsplash.com/photo-1542272604-787c3832bf3d?w=400&h=300&fit=crop" },
           // Level 2: Under Home & Kitchen
           { id: 19, name: "Kitchen Appliances", slug: "kitchen-appliances", parentId: 3, sortOrder: 1, imageUrl: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop" },
           { id: 20, name: "Furniture", slug: "furniture", parentId: 3, sortOrder: 2, imageUrl: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop" },
           // Level 2: Under Books
-          { id: 21, name: "Fiction", slug: "fiction", parentId: 4, sortOrder: 1 },
-          { id: 22, name: "Non-Fiction", slug: "non-fiction", parentId: 4, sortOrder: 2 },
+          { id: 21, name: "Fiction", slug: "fiction", parentId: 4, sortOrder: 1, imageUrl: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&h=300&fit=crop" },
+          { id: 22, name: "Non-Fiction", slug: "non-fiction", parentId: 4, sortOrder: 2, imageUrl: "https://images.unsplash.com/photo-1544944744-04b3c1c9293e?w=400&h=300&fit=crop" },
           // Level 2: Under Sports & Fitness
           { id: 23, name: "Fitness Equipment", slug: "fitness-equipment", parentId: 5, sortOrder: 1, imageUrl: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=300&fit=crop" },
           { id: 24, name: "Team Sports", slug: "team-sports", parentId: 5, sortOrder: 2, imageUrl: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=400&h=300&fit=crop" },
           // Level 2: Under Toys & Games
-          { id: 25, name: "Building Toys", slug: "building-toys", parentId: 6, sortOrder: 1 },
-          { id: 26, name: "Board Games", slug: "board-games", parentId: 6, sortOrder: 2 },
+          { id: 25, name: "Building Toys", slug: "building-toys", parentId: 6, sortOrder: 1, imageUrl: "https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=400&h=300&fit=crop" },
+          { id: 26, name: "Board Games", slug: "board-games", parentId: 6, sortOrder: 2, imageUrl: "https://images.unsplash.com/photo-1566576912329-d591f6c2c2e8?w=400&h=300&fit=crop" },
           // Level 2: Under Beauty & Health
           { id: 27, name: "Skincare", slug: "skincare", parentId: 7, sortOrder: 1, imageUrl: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=400&h=300&fit=crop" },
-          { id: 28, name: "Personal Care", slug: "personal-care", parentId: 7, sortOrder: 2 },
+          { id: 28, name: "Personal Care", slug: "personal-care", parentId: 7, sortOrder: 2, imageUrl: "https://images.unsplash.com/photo-1570172619644-dfd03ed1d3e2?w=400&h=300&fit=crop" },
           // Level 2: Under Automotive
-          { id: 29, name: "Car Accessories", slug: "car-accessories", parentId: 8, sortOrder: 1 },
-          { id: 30, name: "Car Care", slug: "car-care", parentId: 8, sortOrder: 2 },
+          { id: 29, name: "Car Accessories", slug: "car-accessories", parentId: 8, sortOrder: 1, imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop" },
+          { id: 30, name: "Car Care", slug: "car-care", parentId: 8, sortOrder: 2, imageUrl: "https://images.unsplash.com/photo-1549317661-4d4bec51c1cf?w=400&h=300&fit=crop" },
           // Level 2: Under Grocery
-          { id: 31, name: "Staples", slug: "staples", parentId: 9, sortOrder: 1 },
-          { id: 32, name: "Snacks", slug: "snacks", parentId: 9, sortOrder: 2 },
+          { id: 31, name: "Staples", slug: "staples", parentId: 9, sortOrder: 1, imageUrl: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=400&h=300&fit=crop" },
+          { id: 32, name: "Snacks", slug: "snacks", parentId: 9, sortOrder: 2, imageUrl: "https://images.unsplash.com/photo-1606787366850-de6337344089?w=400&h=300&fit=crop" },
           // Level 2: Under Office Products
-          { id: 33, name: "Desk Accessories", slug: "desk-accessories", parentId: 10, sortOrder: 1 },
-          { id: 34, name: "Stationery", slug: "stationery", parentId: 10, sortOrder: 2 },
+          { id: 33, name: "Desk Accessories", slug: "desk-accessories", parentId: 10, sortOrder: 1, imageUrl: "https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?w=400&h=300&fit=crop" },
+          { id: 34, name: "Stationery", slug: "stationery", parentId: 10, sortOrder: 2, imageUrl: "https://images.unsplash.com/photo-1456735190827-d1262f71b8a2?w=400&h=300&fit=crop" },
         ],
       });
 
@@ -165,7 +165,7 @@ async function main() {
             name: "Samsung Galaxy S24 Ultra",
             slug: "samsung-galaxy-s24-ultra",
             brandId: 1,
-            categoryId: 17,
+            categoryId: 11,
             shortDesc: '6.8" Dynamic AMOLED, 200MP Camera, S Pen',
             longDesc: "<p>The Samsung Galaxy S24 Ultra features a stunning 6.8-inch Dynamic AMOLED display, a powerful 200MP camera system with 100x Space Zoom, and the iconic S Pen for productivity.</p>",
             basePrice: 129999.0,
@@ -180,7 +180,7 @@ async function main() {
             name: "Apple iPhone 15 Pro Max",
             slug: "apple-iphone-15-pro-max",
             brandId: 2,
-            categoryId: 17,
+            categoryId: 11,
             shortDesc: '6.7" Super Retina XDR, A17 Pro Chip, Titanium Design',
             longDesc: "<p>iPhone 15 Pro Max features a strong and light titanium design with the A17 Pro chip, a customizable Action button, and the most powerful iPhone camera system ever.</p>",
             basePrice: 159900.0,
@@ -740,78 +740,78 @@ async function main() {
       await tx.productImage.createMany({
         data: [
           // Samsung Galaxy S24 Ultra
-          { productId: 1, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s24-ultra-5g-sm-s928-stylus.jpg", altText: "S24 Ultra Front", sortOrder: 0, isPrimary: true },
-          { productId: 1, variantId: null, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Samsung_Galaxy_s24_series.jpg/500px-Samsung_Galaxy_s24_series.jpg", altText: "S24 Ultra Back", sortOrder: 1, isPrimary: false },
-          { productId: 1, variantId: 1, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s24-ultra-5g-sm-s928-stylus.jpg", altText: "S24 Ultra Titanium Black", sortOrder: 2, isPrimary: false },
+          { productId: 1, variantId: null, imageUrl: "https://images.unsplash.com/photo-1610945265064-0e34e2378842?w=500&h=500&fit=crop", altText: "S24 Ultra Front", sortOrder: 0, isPrimary: true },
+          { productId: 1, variantId: null, imageUrl: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa7?w=500&h=500&fit=crop", altText: "S24 Ultra Back", sortOrder: 1, isPrimary: false },
+          { productId: 1, variantId: 1, imageUrl: "https://images.unsplash.com/photo-1598327105666-5b24d092b8d5?w=500&h=500&fit=crop", altText: "S24 Ultra Titanium Black", sortOrder: 2, isPrimary: false },
           // iPhone 15 Pro Max
-          { productId: 2, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-15-pro-max.jpg", altText: "iPhone 15 Pro Max Front", sortOrder: 0, isPrimary: true },
-          { productId: 2, variantId: null, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/IPhone_15_Pro_Max.jpeg/500px-IPhone_15_Pro_Max.jpeg", altText: "iPhone 15 Pro Max Back", sortOrder: 1, isPrimary: false },
-          { productId: 2, variantId: 4, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-15-pro-max.jpg", altText: "iPhone 15 Pro Max Natural", sortOrder: 2, isPrimary: false },
+          { productId: 2, variantId: null, imageUrl: "https://images.unsplash.com/photo-1695048133142-b3181d2b7f40?w=500&h=500&fit=crop", altText: "iPhone 15 Pro Max Front", sortOrder: 0, isPrimary: true },
+          { productId: 2, variantId: null, imageUrl: "https://images.unsplash.com/photo-1592750427025-9e0c4777e265?w=500&h=500&fit=crop", altText: "iPhone 15 Pro Max Back", sortOrder: 1, isPrimary: false },
+          { productId: 2, variantId: 4, imageUrl: "https://images.unsplash.com/photo-1695048133142-b3181d2b7f40?w=500&h=500&fit=crop", altText: "iPhone 15 Pro Max Natural", sortOrder: 2, isPrimary: false },
           // OnePlus 12
-          { productId: 3, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/oneplus-12.jpg", altText: "OnePlus 12 Front", sortOrder: 0, isPrimary: true },
-          { productId: 3, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/oneplus-12.jpg", altText: "OnePlus 12 Back", sortOrder: 1, isPrimary: false },
+          { productId: 3, variantId: null, imageUrl: "https://images.unsplash.com/photo-1598327105666-5b24d092b8d5?w=500&h=500&fit=crop", altText: "OnePlus 12 Front", sortOrder: 0, isPrimary: true },
+          { productId: 3, variantId: null, imageUrl: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa7?w=500&h=500&fit=crop", altText: "OnePlus 12 Back", sortOrder: 1, isPrimary: false },
           // HP Pavilion
-          { productId: 4, variantId: null, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/HP_Pavilion_15_cs3095nr.png/500px-HP_Pavilion_15_cs3095nr.png", altText: "HP Pavilion Front", sortOrder: 0, isPrimary: true },
-          { productId: 4, variantId: null, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/HP_Pavilion_15_cs3095nr.png/500px-HP_Pavilion_15_cs3095nr.png", altText: "HP Pavilion Open", sortOrder: 1, isPrimary: false },
+          { productId: 4, variantId: null, imageUrl: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500&h=500&fit=crop", altText: "HP Pavilion Front", sortOrder: 0, isPrimary: true },
+          { productId: 4, variantId: null, imageUrl: "https://images.unsplash.com/photo-1525547716367-8cf61758d052?w=500&h=500&fit=crop", altText: "HP Pavilion Open", sortOrder: 1, isPrimary: false },
           // MacBook Air M2
-          { productId: 5, variantId: null, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Macbook_Air_M1_Silver_PNG.png/500px-Macbook_Air_M1_Silver_PNG.png", altText: "MacBook Air M2 Top", sortOrder: 0, isPrimary: true },
-          { productId: 5, variantId: null, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Macbook_Air_M1_Silver_PNG.png/500px-Macbook_Air_M1_Silver_PNG.png", altText: "MacBook Air M2 Open", sortOrder: 1, isPrimary: false },
-          { productId: 5, variantId: 12, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Macbook_Air_M1_Silver_PNG.png/500px-Macbook_Air_M1_Silver_PNG.png", altText: "MacBook Air M2 Midnight", sortOrder: 2, isPrimary: false },
+          { productId: 5, variantId: null, imageUrl: "https://images.unsplash.com/photo-1517336714731-489689fd1cc8?w=500&h=500&fit=crop", altText: "MacBook Air M2 Top", sortOrder: 0, isPrimary: true },
+          { productId: 5, variantId: null, imageUrl: "https://images.unsplash.com/photo-1611186871348-b1ce696e9f74?w=500&h=500&fit=crop", altText: "MacBook Air M2 Open", sortOrder: 1, isPrimary: false },
+          { productId: 5, variantId: 12, imageUrl: "https://images.unsplash.com/photo-1517336714731-489689fd1cc8?w=500&h=500&fit=crop", altText: "MacBook Air M2 Midnight", sortOrder: 2, isPrimary: false },
           // Sony WH-1000XM5
-          { productId: 6, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/sony-wh-1000xm5.jpg", altText: "Sony XM5 Front", sortOrder: 0, isPrimary: true },
-          { productId: 6, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/sony-wh-1000xm5.jpg", altText: "Sony XM5 Side", sortOrder: 1, isPrimary: false },
+          { productId: 6, variantId: null, imageUrl: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop", altText: "Sony XM5 Front", sortOrder: 0, isPrimary: true },
+          { productId: 6, variantId: null, imageUrl: "https://images.unsplash.com/photo-1583394838223-9fc2ba066c23?w=500&h=500&fit=crop", altText: "Sony XM5 Side", sortOrder: 1, isPrimary: false },
           // boAt Rockerz 551ANC
-          { productId: 7, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/boat-rockerz-551anc.jpg", altText: "boAt 551ANC", sortOrder: 0, isPrimary: true },
+          { productId: 7, variantId: null, imageUrl: "https://images.unsplash.com/photo-1484709838915-9b395913d6b2?w=500&h=500&fit=crop", altText: "boAt 551ANC", sortOrder: 0, isPrimary: true },
           // Samsung TV 43"
-          { productId: 8, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/samsung-crystal-4k-43.jpg", altText: 'Samsung 43" TV', sortOrder: 0, isPrimary: true },
+          { productId: 8, variantId: null, imageUrl: "https://images.unsplash.com/photo-1593359677879-a6e3233ad4e2?w=500&h=500&fit=crop", altText: 'Samsung 43" TV', sortOrder: 0, isPrimary: true },
           // LG OLED 55"
-          { productId: 9, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/lg-oled55c1.jpg", altText: "LG OLED Front", sortOrder: 0, isPrimary: true },
-          { productId: 9, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/lg-oled55c1.jpg", altText: "LG OLED Side", sortOrder: 1, isPrimary: false },
+          { productId: 9, variantId: null, imageUrl: "https://images.unsplash.com/photo-1587826080692-f439cd0b70da?w=500&h=500&fit=crop", altText: "LG OLED Front", sortOrder: 0, isPrimary: true },
+          { productId: 9, variantId: null, imageUrl: "https://images.unsplash.com/photo-1593359677879-a6e3233ad4e2?w=500&h=500&fit=crop", altText: "LG OLED Side", sortOrder: 1, isPrimary: false },
           // Nike Dri-FIT T-Shirt
-          { productId: 10, variantId: null, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Air_Max_270_Sail_Lilac_on_feet.jpg/500px-Air_Max_270_Sail_Lilac_on_feet.jpg", altText: "Nike Dri-FIT T-Shirt", sortOrder: 0, isPrimary: true },
-          { productId: 10, variantId: 15, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Air_Max_270_Sail_Lilac_on_feet.jpg/500px-Air_Max_270_Sail_Lilac_on_feet.jpg", altText: "Nike Dri-FIT Size L", sortOrder: 1, isPrimary: false },
+          { productId: 10, variantId: null, imageUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&h=500&fit=crop", altText: "Nike Dri-FIT T-Shirt", sortOrder: 0, isPrimary: true },
+          { productId: 10, variantId: 15, imageUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&h=500&fit=crop", altText: "Nike Dri-FIT Size L", sortOrder: 1, isPrimary: false },
           // Levi's T-Shirt
-          { productId: 11, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/levis-crew-tshirt.jpg", altText: "Levis Crew T-Shirt", sortOrder: 0, isPrimary: true },
+          { productId: 11, variantId: null, imageUrl: "https://images.unsplash.com/photo-1583743814966-893ee34daf8d?w=500&h=500&fit=crop", altText: "Levis Crew T-Shirt", sortOrder: 0, isPrimary: true },
           // Levi's 511 Jeans
-          { productId: 12, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/levis-511-slim.jpg", altText: "Levis 511 Front", sortOrder: 0, isPrimary: true },
-          { productId: 12, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/levis-511-slim.jpg", altText: "Levis 511 Side", sortOrder: 1, isPrimary: false },
+          { productId: 12, variantId: null, imageUrl: "https://images.unsplash.com/photo-1542272604-787c3832bf3d?w=500&h=500&fit=crop", altText: "Levis 511 Front", sortOrder: 0, isPrimary: true },
+          { productId: 12, variantId: null, imageUrl: "https://images.unsplash.com/photo-1541097970445-274f6f0072f2?w=500&h=500&fit=crop", altText: "Levis 511 Side", sortOrder: 1, isPrimary: false },
           // Nike Joggers
-          { productId: 13, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/nike-dri-fit-flex.jpg", altText: "Nike Joggers", sortOrder: 0, isPrimary: true },
+          { productId: 13, variantId: null, imageUrl: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=500&h=500&fit=crop", altText: "Nike Joggers", sortOrder: 0, isPrimary: true },
           // Prestige Pressure Cooker
-          { productId: 14, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/prestige-pressure-cooker.jpg", altText: "Prestige Pressure Cooker", sortOrder: 0, isPrimary: true },
+          { productId: 14, variantId: null, imageUrl: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=500&h=500&fit=crop", altText: "Prestige Pressure Cooker", sortOrder: 0, isPrimary: true },
           // Samsung Refrigerator
-          { productId: 15, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/samsung-253l-fridge.jpg", altText: "Samsung Fridge", sortOrder: 0, isPrimary: true },
+          { productId: 15, variantId: null, imageUrl: "https://images.unsplash.com/photo-1571175432247-ca63895e7992?w=500&h=500&fit=crop", altText: "Samsung Fridge", sortOrder: 0, isPrimary: true },
           // Books
-          { productId: 16, variantId: null, imageUrl: "https://covers.openlibrary.org/b/id/10389354-L.jpg", altText: "Great Indian Novel", sortOrder: 0, isPrimary: true },
-          { productId: 17, variantId: null, imageUrl: "https://covers.openlibrary.org/b/id/8634250-L.jpg", altText: "Sapiens", sortOrder: 0, isPrimary: true },
-          { productId: 26, variantId: null, imageUrl: "https://covers.openlibrary.org/b/id/12539702-L.jpg", altText: "Atomic Habits", sortOrder: 0, isPrimary: true },
-          { productId: 27, variantId: null, imageUrl: "https://covers.openlibrary.org/b/id/4052784-L.jpg", altText: "Psychology of Money", sortOrder: 0, isPrimary: true },
+          { productId: 16, variantId: null, imageUrl: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=500&h=500&fit=crop", altText: "Great Indian Novel", sortOrder: 0, isPrimary: true },
+          { productId: 17, variantId: null, imageUrl: "https://images.unsplash.com/photo-1544944744-04b3c1c9293e?w=500&h=500&fit=crop", altText: "Sapiens", sortOrder: 0, isPrimary: true },
+          { productId: 26, variantId: null, imageUrl: "https://images.unsplash.com/photo-1524995997947-a306fd4cfd27?w=500&h=500&fit=crop", altText: "Atomic Habits", sortOrder: 0, isPrimary: true },
+          { productId: 27, variantId: null, imageUrl: "https://images.unsplash.com/photo-1495446822316-db4d2152f2e0?w=500&h=500&fit=crop", altText: "Psychology of Money", sortOrder: 0, isPrimary: true },
           // Samsung Galaxy A54
-          { productId: 18, variantId: null, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Back_of_the_Samsung_Galaxy_A54_5G.jpg/500px-Back_of_the_Samsung_Galaxy_A54_5G.jpg", altText: "A54 Front", sortOrder: 0, isPrimary: true },
-          { productId: 18, variantId: 27, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Back_of_the_Samsung_Galaxy_A54_5G.jpg/500px-Back_of_the_Samsung_Galaxy_A54_5G.jpg", altText: "A54 Graphite", sortOrder: 1, isPrimary: false },
+          { productId: 18, variantId: null, imageUrl: "https://images.unsplash.com/photo-1610945265064-0e34e2378842?w=500&h=500&fit=crop", altText: "A54 Front", sortOrder: 0, isPrimary: true },
+          { productId: 18, variantId: 27, imageUrl: "https://images.unsplash.com/photo-1598327105666-5b24d092b8d5?w=500&h=500&fit=crop", altText: "A54 Graphite", sortOrder: 1, isPrimary: false },
           // OnePlus Nord CE 3 Lite
-          { productId: 19, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/oneplus-nord-ce3-lite.jpg", altText: "Nord CE 3 Lite", sortOrder: 0, isPrimary: true },
+          { productId: 19, variantId: null, imageUrl: "https://images.unsplash.com/photo-1592750427025-9e0c4777e265?w=500&h=500&fit=crop", altText: "Nord CE 3 Lite", sortOrder: 0, isPrimary: true },
           // HP 15s Ryzen
-          { productId: 20, variantId: null, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/HP_Pavilion_15_cs3095nr.png/500px-HP_Pavilion_15_cs3095nr.png", altText: "HP 15s Ryzen", sortOrder: 0, isPrimary: true },
+          { productId: 20, variantId: null, imageUrl: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500&h=500&fit=crop", altText: "HP 15s Ryzen", sortOrder: 0, isPrimary: true },
           // Nike Air Max 270
-          { productId: 21, variantId: null, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Air_Max_270_Sail_Lilac_on_feet.jpg/500px-Air_Max_270_Sail_Lilac_on_feet.jpg", altText: "Air Max 270", sortOrder: 0, isPrimary: true },
-          { productId: 21, variantId: 32, imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Air_Max_270_Sail_Lilac_on_feet.jpg/500px-Air_Max_270_Sail_Lilac_on_feet.jpg", altText: "Air Max 270 UK 8", sortOrder: 1, isPrimary: false },
+          { productId: 21, variantId: null, imageUrl: "https://images.unsplash.com/photo-1552346154-21d32810c9b2?w=500&h=500&fit=crop", altText: "Air Max 270", sortOrder: 0, isPrimary: true },
+          { productId: 21, variantId: 32, imageUrl: "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=500&h=500&fit=crop", altText: "Air Max 270 UK 8", sortOrder: 1, isPrimary: false },
           // Prestige Induction
-          { productId: 22, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/prestige-induction-cooktop.jpg", altText: "Prestige Induction", sortOrder: 0, isPrimary: true },
+          { productId: 22, variantId: null, imageUrl: "https://images.unsplash.com/photo-1574269909862-7e1d70bb8078?w=500&h=500&fit=crop", altText: "Prestige Induction", sortOrder: 0, isPrimary: true },
           // Sony WF-1000XM5
-          { productId: 23, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/sony-wf-1000xm5.jpg", altText: "WF-1000XM5", sortOrder: 0, isPrimary: true },
-          { productId: 23, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/sony-wf-1000xm5.jpg", altText: "WF-1000XM5 Case", sortOrder: 1, isPrimary: false },
+          { productId: 23, variantId: null, imageUrl: "https://images.unsplash.com/photo-1590658118975-696e4c4c43f0?w=500&h=500&fit=crop", altText: "WF-1000XM5", sortOrder: 0, isPrimary: true },
+          { productId: 23, variantId: null, imageUrl: "https://images.unsplash.com/photo-1583394838223-9fc2ba066c23?w=500&h=500&fit=crop", altText: "WF-1000XM5 Case", sortOrder: 1, isPrimary: false },
           // Samsung QLED 65"
-          { productId: 24, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/samsung-qled-65-q80c.jpg", altText: "Samsung QLED 65", sortOrder: 0, isPrimary: true },
+          { productId: 24, variantId: null, imageUrl: "https://images.unsplash.com/photo-1593359677879-a6e3233ad4e2?w=500&h=500&fit=crop", altText: "Samsung QLED 65", sortOrder: 0, isPrimary: true },
           // Apple Watch
-          { productId: 25, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/apple-watch-series-9.jpg", altText: "Watch Series 9", sortOrder: 0, isPrimary: true },
-          { productId: 25, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/apple-watch-series-9.jpg", altText: "Watch Series 9 Wrist", sortOrder: 1, isPrimary: false },
+          { productId: 25, variantId: null, imageUrl: "https://images.unsplash.com/photo-1546868871-af0de0ae4be7?w=500&h=500&fit=crop", altText: "Watch Series 9", sortOrder: 0, isPrimary: true },
+          { productId: 25, variantId: null, imageUrl: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=500&h=500&fit=crop", altText: "Watch Series 9 Wrist", sortOrder: 1, isPrimary: false },
           // Levi's 501
-          { productId: 28, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/levis-501-original.jpg", altText: "Levis 501", sortOrder: 0, isPrimary: true },
+          { productId: 28, variantId: null, imageUrl: "https://images.unsplash.com/photo-1542272604-787c3832bf3d?w=500&h=500&fit=crop", altText: "Levis 501", sortOrder: 0, isPrimary: true },
           // Nike Revolution 6
-          { productId: 29, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/nike-revolution-6.jpg", altText: "Nike Revolution 6", sortOrder: 0, isPrimary: true },
+          { productId: 29, variantId: null, imageUrl: "https://images.unsplash.com/photo-1542293567-909e5291e7ab?w=500&h=500&fit=crop", altText: "Nike Revolution 6", sortOrder: 0, isPrimary: true },
           // Samsung Galaxy Buds FE
-          { productId: 30, variantId: null, imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-buds-fe.jpg", altText: "Galaxy Buds FE", sortOrder: 0, isPrimary: true },
+          { productId: 30, variantId: null, imageUrl: "https://images.unsplash.com/photo-1590658118975-696e4c4c43f0?w=500&h=500&fit=crop", altText: "Galaxy Buds FE", sortOrder: 0, isPrimary: true },
         ],
       });
 
@@ -1112,7 +1112,7 @@ async function main() {
             quantity: 1,
             unitPrice: 129999.0,
             totalPrice: 129999.0,
-            imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s24-ultra-5g-sm-s928-stylus.jpg",
+            imageUrl: "https://images.unsplash.com/photo-1610945265064-0e34e2378842?w=200&h=200&fit=crop",
           },
           {
             orderId: 1,
@@ -1124,7 +1124,7 @@ async function main() {
             quantity: 1,
             unitPrice: 349.0,
             totalPrice: 349.0,
-            imageUrl: "https://covers.openlibrary.org/b/id/8634250-L.jpg",
+            imageUrl: "https://images.unsplash.com/photo-1544944744-04b3c1c9293e?w=200&h=200&fit=crop",
           },
           {
             orderId: 1,
@@ -1136,7 +1136,7 @@ async function main() {
             quantity: 2,
             unitPrice: 399.0,
             totalPrice: 798.0,
-            imageUrl: "https://covers.openlibrary.org/b/id/12539702-L.jpg",
+            imageUrl: "https://images.unsplash.com/photo-1524995997947-a306fd4cfd27?w=200&h=200&fit=crop",
           },
           // Order 2: Nike T-Shirt + Levi's Jeans + boAt
           {
@@ -1149,7 +1149,7 @@ async function main() {
             quantity: 1,
             unitPrice: 1295.0,
             totalPrice: 1295.0,
-            imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Air_Max_270_Sail_Lilac_on_feet.jpg/500px-Air_Max_270_Sail_Lilac_on_feet.jpg",
+            imageUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=200&h=200&fit=crop",
           },
           {
             orderId: 2,
@@ -1161,7 +1161,7 @@ async function main() {
             quantity: 1,
             unitPrice: 2799.0,
             totalPrice: 2799.0,
-            imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/levis-511-slim.jpg",
+            imageUrl: "https://images.unsplash.com/photo-1542272604-787c3832bf3d?w=200&h=200&fit=crop",
           },
           {
             orderId: 2,
@@ -1173,7 +1173,7 @@ async function main() {
             quantity: 1,
             unitPrice: 2499.0,
             totalPrice: 2499.0,
-            imageUrl: "https://fdn2.gsmarena.com/vv/bigpic/boat-rockerz-551anc.jpg",
+            imageUrl: "https://images.unsplash.com/photo-1484709838915-9b395913d6b2?w=200&h=200&fit=crop",
           },
         ],
       });

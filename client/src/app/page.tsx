@@ -24,20 +24,14 @@ export default function HomePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [catRes, dealsRes, trendingRes, bestRes, electronicsRes, homeRes] = await Promise.all([
-          api.get('/categories'),
-          api.get('/products?sort=price_asc&limit=20'),
-          api.get('/products?sort=newest&limit=20'),
-          api.get('/products?sort=bestselling&limit=20'),
-          api.get('/products?categoryId=1&limit=20'),
-          api.get('/products?categoryId=3&limit=20'),
-        ]);
-        setCategories((catRes as any)?.data?.categories || []);
-        setDeals((dealsRes as any)?.data?.products || []);
-        setTrending((trendingRes as any)?.data?.products || []);
-        setBestSellers((bestRes as any)?.data?.products || []);
-        setElectronics((electronicsRes as any)?.data?.products || []);
-        setHomeKitchen((homeRes as any)?.data?.products || []);
+        const res: any = await api.get('/home');
+        const d = res.data || {};
+        setCategories(d.categories || []);
+        setDeals(d.deals || []);
+        setTrending(d.trending || []);
+        setBestSellers(d.bestSellers || []);
+        setElectronics(d.electronics || []);
+        setHomeKitchen(d.homeKitchen || []);
       } catch (err) {
         console.error('Failed to fetch homepage data:', err);
       } finally {
