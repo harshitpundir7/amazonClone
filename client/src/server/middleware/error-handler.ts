@@ -29,9 +29,7 @@ export function withErrorHandler<T>(
       );
     }
 
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Unexpected error:', err);
-    }
+    console.error('Unexpected error:', err);
 
     return NextResponse.json(
       {
